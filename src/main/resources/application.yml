@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/classpick_local
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+    open-in-view: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+  sql:
+    init:
+      mode: always
+  cors:
+    allowed-origins: "*"
+server:
+  servlet:
+    context-path: /api
