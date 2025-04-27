@@ -36,8 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-### macOS ###
-# General
-.DS_Store
-.AppleDouble
-.LSOverride
+### yml
+src/main/resources/application.yml
