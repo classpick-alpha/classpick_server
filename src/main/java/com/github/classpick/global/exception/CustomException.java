@@ -1,4 +1,4 @@
-package com.github.classpick.global;
+package com.github.classpick.global.exception;
 
 import lombok.Getter;
 

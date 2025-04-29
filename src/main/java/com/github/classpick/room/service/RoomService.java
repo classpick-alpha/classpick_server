@@ -1,6 +1,6 @@
 package com.github.classpick.room.service;
 
-import static com.github.classpick.room.exception.RoomExceptions.ROOM_NOT_FOUND;
+import static com.github.classpick.room.exception.RoomExceptionCode.ROOM_NOT_FOUND;
 
 import com.github.classpick.reservation.repository.ReservationEntity;
 import com.github.classpick.reservation.repository.ReservationRepository;
@@ -49,8 +49,8 @@ public class RoomService {
 
     public RoomTimeTableResponse getRoomTimeTable(Long roomId, RoomTimeTableRequest dto){
         RoomEntity room = roomRepository.findById(roomId)
-                .orElseThrow(() -> RoomException.of(ROOM_NOT_FOUND));
-
+                .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND.getMessage(),
+                                ROOM_NOT_FOUND.getCode()));
         LocalDate baseDate = dto.date() != null ? dto.date() : LocalDate.now();
         LocalDate monday = baseDate.with(DayOfWeek.MONDAY);
         LocalDate friday = baseDate.with(DayOfWeek.FRIDAY);

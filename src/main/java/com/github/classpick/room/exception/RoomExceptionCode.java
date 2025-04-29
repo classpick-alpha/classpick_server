@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum RoomExceptions {
+public enum RoomExceptionCode {
 
     ROOM_NOT_FOUND("강의실 정보가 없습니다.", 2000);
 
