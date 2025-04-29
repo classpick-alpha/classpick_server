@@ -29,28 +29,28 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
+    private final UserGetter userGetter;
 
     // TODO: userId를 직접 받는 것은 보안 상 위험함으로,
     //  추후 인증 구현 후 JWT 토큰에서 사용자 정보 추출하는 방식으로 수정
     @Transactional
     public void createReservation(CreateReservationReq createReservationReq) {
-        UserEntity user = userRepository.findById(createReservationReq.getUserId())
-                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND.getMessage(),
-                        UserExceptionCode.USER_NOT_FOUND.getCode()));
+        Long userId = userGetter.getUserId();
+        UserEntity userEntity = userGetter.getUserEntity();
 
         RoomEntity room = roomRepository.findById(createReservationReq.getRoomId())
                 .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND.getMessage(),
                 RoomExceptionCode.ROOM_NOT_FOUND.getCode()));
 
-        boolean isDuplicated = reservationRepository.existsByRoom_RoomIdAndStartTimeLessThanAndEndTimeGreaterThan(
-                createReservationReq.getRoomId(), createReservationReq.getStartTime(), createReservationReq.getEndTime());
+        boolean isDuplicated = reservationRepository.checkAvailableRoom(
+                createReservationReq.getRoomId(), createReservationReq.getDate(), createReservationReq.getStartTime(), createReservationReq.getEndTime());
         if (isDuplicated) {
             throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_EXIST.getMessage(),
                     ReservationExceptionCode.RESERVATION_ALREADY_EXIST.getCode());
         }
 
         ReservationEntity reservation = ReservationEntity.builder()
-                .user(user)
+                .user(userEntity)
                 .room(room)
                 .purpose(createReservationReq.getPurpose())
                 .people(createReservationReq.getPeople())

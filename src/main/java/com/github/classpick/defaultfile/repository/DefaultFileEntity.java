@@ -21,7 +21,7 @@ public class DefaultFileEntity extends BaseTimeEntity {
     private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "userId")
     private UserEntity user;
 
 }

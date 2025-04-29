@@ -1,9 +1,12 @@
 package com.github.classpick.reservation.repository;
 
+import com.github.classpick.global.entity.BaseTimeEntity;
 import com.github.classpick.room.repository.RoomEntity;
 import com.github.classpick.user.repository.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReservationEntity {
+public class ReservationEntity extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long reservationId;
@@ -27,13 +30,17 @@ public class ReservationEntity {
     private UserEntity user;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @NotNull
-    private LocalDateTime startTime;
+    LocalDate date;
 
     @NotNull
-    private LocalDateTime endTime;
+    LocalTime startTime;
+
+    @NotNull
+    LocalTime endTime;
 
     @NotNull
     private String purpose;
@@ -42,9 +49,6 @@ public class ReservationEntity {
     private Long people;
 
     private String comment;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
 
 
