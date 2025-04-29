@@ -21,7 +21,7 @@ public class RoomTimeTableResponse {
             RoomEntity roomEntity,
             List<DailyReservation> weeklyReservations
     ) {
-        String roomName = roomEntity.getPlaceName() + " " + roomEntity.getRoomId();
+        String roomName = roomEntity.getPlaceName() + " " + roomEntity.getUnitNumber();
         return RoomTimeTableResponse.builder()
                 .roomId(roomEntity.getRoomId())
                 .roomName(roomName)
