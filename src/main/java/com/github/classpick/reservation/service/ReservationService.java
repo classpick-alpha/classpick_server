@@ -42,8 +42,8 @@ public class ReservationService {
                 .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND.getMessage(),
                 RoomExceptionCode.ROOM_NOT_FOUND.getCode()));
 
-        boolean isDuplicated = reservationRepository.existsByRoom_RoomIdAndStartTimeLessThanAndEndTimeGreaterThan(
-                createReservationReq.getRoomId(), createReservationReq.getStartTime(), createReservationReq.getEndTime());
+        boolean isDuplicated = reservationRepository.checkAvailableRoom(
+                createReservationReq.getRoomId(), createReservationReq.getDate(), createReservationReq.getStartTime(), createReservationReq.getEndTime());
         if (isDuplicated) {
             throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_EXIST.getMessage(),
                     ReservationExceptionCode.RESERVATION_ALREADY_EXIST.getCode());

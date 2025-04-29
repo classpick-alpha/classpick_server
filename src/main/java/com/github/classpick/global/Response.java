@@ -18,6 +18,6 @@ public class Response<Data> {
     }
 
     public static <Data> Response<Data> ok(Data data) {
-        return of(200, "sucess", data);
+        return of(200, "success", data);
     }
 }

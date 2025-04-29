@@ -2,10 +2,10 @@ package com.github.classpick.reservation.controller.dto.request;
 
 import com.github.classpick.reservation.repository.Status;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor(staticName = "of")
@@ -24,10 +24,13 @@ public class CreateReservationReq {
     private Long people;
 
     @NotNull
-    private LocalDateTime startTime;
+    private LocalDate date;
 
     @NotNull
-    private LocalDateTime endTime;
+    private LocalTime startTime;
+
+    @NotNull
+    private LocalTime endTime;
 
     @NotNull
     private Status status;
