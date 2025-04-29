@@ -1,19 +1,22 @@
 package com.github.classpick.room.controller.dto.response;
 
+import com.github.classpick.reservation.repository.Status;
 import com.github.classpick.room.repository.RoomEntity;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
-import com.github.classpick.reservation.repository.Status;
-
+@Getter
+@AllArgsConstructor
 @Builder
-public record RoomTimeTableResponse(
-    long roomId,
-    String roomName,
-    List<DailyReservation> weeklyReservations
-) {
+public class RoomTimeTableResponse {
+    private long roomId;
+    private String roomName;
+    private List<DailyReservation> weeklyReservations;
+
     public static RoomTimeTableResponse from(
             RoomEntity roomEntity,
             List<DailyReservation> weeklyReservations
@@ -26,32 +29,36 @@ public record RoomTimeTableResponse(
                 .build();
     }
 
+    @Getter
+    @AllArgsConstructor
     @Builder
-    public record DailyReservation(
-            LocalDate date,
-            List<TimeReservations> timeReservations
-    ){
+    public static final class DailyReservation {
+        private final LocalDate date;
+        private final List<TimeReservations> timeReservations;
+
+
         @Builder
         public static DailyReservation from(
                 LocalDate date,
                 List<TimeReservations> timeReservations
-        ){
+        ) {
             return new DailyReservation(date, timeReservations);
         }
-
     }
 
+    @Getter
+    @AllArgsConstructor
     @Builder
-    public record TimeReservations(
-            LocalTime startTime,
-            LocalTime endTime,
-            Status status
-    ){
+    public static final class TimeReservations {
+        private final LocalTime startTime;
+        private final LocalTime endTime;
+        private final Status status;
+
         public static TimeReservations from(
                 LocalTime startTime,
                 LocalTime endTime,
                 Status status
-        ){
+        ) {
             return new TimeReservations(startTime, endTime, status);
         }
     }
