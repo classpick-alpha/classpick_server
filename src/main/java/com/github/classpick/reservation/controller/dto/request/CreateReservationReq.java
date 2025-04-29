@@ -12,9 +12,6 @@ import lombok.Getter;
 public class CreateReservationReq {
 
     @NotNull
-    private Long userId;
-
-    @NotNull
     private Long roomId;
 
     @NotNull
