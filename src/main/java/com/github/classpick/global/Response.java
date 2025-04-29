@@ -16,4 +16,8 @@ public class Response<Data> {
     public static <Data> Response<Data> of(Integer status, String message, Data data) {
         return new Response<>(status, message, LocalDateTime.now(), data);
     }
+
+    public static <Data> Response<Data> ok(Data data) {
+        return of(200, "success", data);
+    }
 }
