@@ -5,20 +5,23 @@ import com.github.classpick.global.Response;
 import com.github.classpick.reservation.controller.dto.request.CancelReservationReq;
 import com.github.classpick.reservation.controller.dto.request.CreateReservationReq;
 import com.github.classpick.reservation.controller.dto.response.GetReservationListRes;
-import com.github.classpick.reservation.repository.ReservationRepository;
 import com.github.classpick.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
 public class ReservationController {
 
-    private final ReservationRepository reservationRepository;
     private final ReservationService reservationService;
 
     @Operation(summary = "예약 생성", description = "사용자가 강의실 예약을 생성합니다.")
