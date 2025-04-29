@@ -32,9 +32,9 @@ public class RoomTimeTableResponse {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static final class DailyReservation {
-        private final LocalDate date;
-        private final List<TimeReservations> timeReservations;
+    public static class DailyReservation {
+        private LocalDate date;
+        private List<TimeReservations> timeReservations;
 
 
         @Builder
@@ -49,10 +49,10 @@ public class RoomTimeTableResponse {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static final class TimeReservations {
-        private final LocalTime startTime;
-        private final LocalTime endTime;
-        private final Status status;
+    public static class TimeReservations {
+        private LocalTime startTime;
+        private LocalTime endTime;
+        private Status status;
 
         public static TimeReservations from(
                 LocalTime startTime,

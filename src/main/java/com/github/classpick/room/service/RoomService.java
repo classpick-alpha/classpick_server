@@ -13,10 +13,7 @@ import com.github.classpick.room.repository.RoomEntity;
 import com.github.classpick.room.repository.RoomRepository;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,8 +46,8 @@ public class RoomService {
 
     public RoomTimeTableResponse getRoomTimeTable(Long roomId, RoomTimeTableRequest dto){
         RoomEntity room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND.getMessage(),
-                                ROOM_NOT_FOUND.getCode()));
+                .orElseThrow(() -> new RoomException(ROOM_NOT_FOUND.getMessage(), ROOM_NOT_FOUND.getCode()));
+
         LocalDate baseDate = dto.date() != null ? dto.date() : LocalDate.now();
         LocalDate monday = baseDate.with(DayOfWeek.MONDAY);
         LocalDate friday = baseDate.with(DayOfWeek.FRIDAY);
@@ -62,28 +59,22 @@ public class RoomService {
                         friday
                 );
 
-        Map<LocalDate, List<ReservationEntity>> reservationsByDate = reservationsOfWeek.stream()
-                .collect(Collectors.groupingBy(ReservationEntity::getDate));
-
-        List<LocalDate> datesOfWeek = monday.datesUntil(friday.plusDays(1))
-                .toList();
-
-        List<RoomTimeTableResponse.DailyReservation> dailyReservations = new ArrayList<>();
-
-        for (LocalDate date : datesOfWeek) {
-            List<ReservationEntity> reservationsOnDate = reservationsByDate.getOrDefault(date, List.of());
-
-            List<RoomTimeTableResponse.TimeReservations> timeReservations = new ArrayList<>();
-            for (ReservationEntity reservation : reservationsOnDate) {
-                timeReservations.add(RoomTimeTableResponse.TimeReservations.from(
-                        reservation.getStartTime(),
-                        reservation.getEndTime(),
-                        reservation.getStatus()
-                ));
-            }
-            dailyReservations.add(RoomTimeTableResponse.DailyReservation.from(date, timeReservations));
-        }
-        return RoomTimeTableResponse.from(room, dailyReservations);
+         return RoomTimeTableResponse.from(
+                 room,
+                 monday.datesUntil(friday.plusDays(1))
+                         .map(date -> RoomTimeTableResponse.DailyReservation.from(
+                                 date,
+                                 reservationsOfWeek.stream()
+                                         .filter(reservation -> reservation.getDate().equals(date))
+                                         .map(reservation -> RoomTimeTableResponse.TimeReservations.from(
+                                                 reservation.getStartTime(),
+                                                 reservation.getEndTime(),
+                                                 reservation.getStatus()
+                                         ))
+                                         .toList()
+                         ))
+                         .toList()
+         );
     }
 
 }
