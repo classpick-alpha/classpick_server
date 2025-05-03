@@ -43,7 +43,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 UserEntity.builder()
                     .email(email)
                     .name(oAuth2User.getName())
-                    .schoolNumber("")
+                    .schoolNumber(null)
                     .userGroup(null)
                     .role(Role.USER)
                     .build()

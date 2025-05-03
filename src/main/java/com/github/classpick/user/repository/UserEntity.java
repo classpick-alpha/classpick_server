@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import static jakarta.persistence.GenerationType.*;
+
 
 @Getter
 @Entity
@@ -13,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = IDENTITY)
     private Long userId;
 
     @NotNull
@@ -22,13 +24,12 @@ public class UserEntity extends BaseTimeEntity {
     @NotNull @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String userGroup;
-
-
-    private String schoolNumber;
-
     @NotNull
     private String email;
+
+    private String userGroup;
+
+    private String schoolNumber;
 
     private String phoneNumber;
 

@@ -2,6 +2,7 @@ package com.github.classpick.security.oauth;
 
 import com.github.classpick.user.repository.UserEntity;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,13 +13,10 @@ import java.util.Collections;
 import java.util.Map;
 
 @Getter
+@RequiredArgsConstructor
 public class OAuth2GoogleUser implements OAuth2User, UserDetails {
 
     private final UserEntity user;
-
-    public OAuth2GoogleUser(UserEntity user) {
-        this.user = user;
-    }
 
     @Override
     public Map<String, Object> getAttributes() {

@@ -1,6 +1,7 @@
 package com.github.classpick.user.controller;
 
 import com.github.classpick.global.Response;
+import com.github.classpick.security.oauth.OAuth2GoogleUser;
 import com.github.classpick.user.controller.dto.GetUserInfoRes;
 import com.github.classpick.user.controller.dto.UpdateUserInfoReq;
 import com.github.classpick.user.service.UserService;
@@ -21,7 +22,7 @@ public class UserController {
     }
 
     @PutMapping("/v0.0/users/info")
-    public Response<GetUserInfoRes> updateUserInfo(@AuthenticationPrincipal com.github.classpick.security.oauth.OAuth2GoogleUser userDetails,
+    public Response<GetUserInfoRes> updateUserInfo(@AuthenticationPrincipal OAuth2GoogleUser userDetails,
                                                    @Valid @RequestBody UpdateUserInfoReq updateUserInfoReq)
     {
         Long userId = userService.updateUserInfo(userDetails.getUser().getUserId(), updateUserInfoReq);

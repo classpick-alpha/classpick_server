@@ -53,7 +53,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
 
         String errorResponse = String.format(
-                "{\"status\": %d, \"message\": \"%s\"}",
+                "{\"timestamp\":\"%s\", \"status\": %d, \"error\": \"%s\", \"path\": \"%s\"}",
                 e.getStatus(),
                 e.getMessage()
         );
