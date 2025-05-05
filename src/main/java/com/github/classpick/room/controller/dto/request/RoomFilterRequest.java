@@ -1,7 +1,6 @@
 package com.github.classpick.room.controller.dto.request;
 
 import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +17,6 @@ public class RoomFilterRequest {
 
     @Nullable
     @Min(1)
-    @Max(99)
     Integer capacity;
 
     @Nullable
