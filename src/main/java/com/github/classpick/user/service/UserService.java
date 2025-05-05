@@ -16,24 +16,19 @@ public class UserService {
     private final UserRepository userRepository;
 
     public Long getUserInfo(Long userId) {
+
         UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND.getMessage(),
-                        UserExceptionCode.USER_NOT_FOUND.getCode()));
+                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));
         return userEntity.getUserId();
     }
 
     @Transactional
     public Long updateUserInfo(Long userId, UpdateUserInfoReq request) {
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND.getMessage(),
-                        UserExceptionCode.USER_NOT_FOUND.getCode())
-                );
 
-        userEntity.updateUserInfo(
-                request.getUserGroup(),
-                request.getSchoolNumber(),
-                request.getPhoneNumber()
-        );
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));
+
+        userEntity.updateUserInfo(request.getUserGroup(), request.getSchoolNumber(), request.getPhoneNumber());
 
         return userEntity.getUserId();
     }

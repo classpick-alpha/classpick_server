@@ -35,18 +35,21 @@ public class ReservationService {
     //  추후 인증 구현 후 JWT 토큰에서 사용자 정보 추출하는 방식으로 수정
     @Transactional
     public void createReservation(CreateReservationReq createReservationReq) {
+
         Long userId = userGetter.getUserId();
         UserEntity userEntity = userGetter.getUserEntity();
 
         RoomEntity room = roomRepository.findById(createReservationReq.getRoomId())
-                .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND.getMessage(),
-                RoomExceptionCode.ROOM_NOT_FOUND.getCode()));
+                .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND));
 
         boolean isDuplicated = reservationRepository.checkAvailableRoom(
-                createReservationReq.getRoomId(), createReservationReq.getDate(), createReservationReq.getStartTime(), createReservationReq.getEndTime());
+                createReservationReq.getRoomId(),
+                createReservationReq.getDate(),
+                createReservationReq.getStartTime(),
+                createReservationReq.getEndTime()
+        );
         if (isDuplicated) {
-            throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_EXIST.getMessage(),
-                    ReservationExceptionCode.RESERVATION_ALREADY_EXIST.getCode());
+            throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_EXIST);
         }
 
         ReservationEntity reservation = ReservationEntity.builder()
@@ -65,27 +68,24 @@ public class ReservationService {
 
     @Transactional
     public void cancelReservation(CancelReservationReq cancelReservationReq) {
-        ReservationEntity reservation = reservationRepository.findById(cancelReservationReq.getReservationId())
-                .orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND.getMessage(),
-                        ReservationExceptionCode.RESERVATION_NOT_FOUND.getCode()));
 
-        if(!reservation.getUser().getUserId().equals(cancelReservationReq.getUserId())) {
-            throw new ReservationException(ReservationExceptionCode.RESERVATION_NOT_MATCH.getMessage(),
-                    ReservationExceptionCode.RESERVATION_NOT_MATCH.getCode());
+        ReservationEntity reservation = reservationRepository.findById(cancelReservationReq.getReservationId())
+                .orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
+
+        if (!reservation.getUser().getUserId().equals(cancelReservationReq.getUserId())) {
+            throw new ReservationException(ReservationExceptionCode.RESERVATION_NOT_MATCH);
         }
 
         reservationRepository.delete(reservation);
     }
 
     @Transactional(readOnly = true)
-    public List<GetReservationListRes> getReservationsList(Long userId){
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND.getMessage(),
-                        UserExceptionCode.USER_NOT_FOUND.getCode()));
+    public List<GetReservationListRes> getReservationsList(Long userId) {
 
-        return reservationRepository.findByUser_UserId(userId).stream()
-                .map(GetReservationListRes::fromEntity)
-                .toList();
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));
+
+        return reservationRepository.findByUser_UserId(userId).stream().map(GetReservationListRes::fromEntity).toList();
     }
 
 }
