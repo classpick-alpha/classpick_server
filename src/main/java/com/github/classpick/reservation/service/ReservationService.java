@@ -30,15 +30,15 @@ public class ReservationService {
     private final UserGetter userGetter;
 
     @Transactional
-    public ReservationResponse createReservation(CreateReservationRequest createReservationRequest) {
+    public ReservationResponse createReservation(long roomId, CreateReservationRequest createReservationRequest) {
 
         UserEntity user = userGetter.getUser();
 
-        RoomEntity room = roomRepository.findById(createReservationRequest.getRoomId())
+        RoomEntity room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND));
 
         if (reservationRepository.checkAvailableRoom(
-                createReservationRequest.getRoomId(),
+                roomId,
                 createReservationRequest.getDate(),
                 createReservationRequest.getStartTime(),
                 createReservationRequest.getEndTime()

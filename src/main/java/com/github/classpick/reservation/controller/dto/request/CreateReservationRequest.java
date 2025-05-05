@@ -14,15 +14,6 @@ import java.time.LocalTime;
 @AllArgsConstructor(staticName = "of")
 public class CreateReservationRequest {
 
-    private long roomId;
-
-    @NotBlank
-    private String purpose;
-
-    @Min(1)
-    @Max(99)
-    private int people;
-
     @NotNull
     private LocalDate date;
 
@@ -31,6 +22,13 @@ public class CreateReservationRequest {
 
     @NotNull
     private LocalTime endTime;
+
+    @Min(1)
+    @Max(99)
+    private int people;
+
+    @NotBlank
+    private String purpose;
 
     @NotBlank
     private String comment;

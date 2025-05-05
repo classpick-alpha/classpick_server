@@ -32,9 +32,9 @@ public class UserController {
 
     @Operation(summary = "유저 ID로 유저 정보 조회")
     @GetMapping("/v0.0/users/{userId}")
-    public Response<SafeUserResponse> getUserId(@PathVariable Long userId) {
+    public Response<SafeUserResponse> getUserById(@PathVariable Long userId) {
 
-        return Response.ok(userService.getUserInfo(userId));
+        return Response.ok(userService.getUserById(userId));
     }
 
     @Operation(summary = "추가 정보 입력")

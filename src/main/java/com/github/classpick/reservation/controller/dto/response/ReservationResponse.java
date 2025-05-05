@@ -23,7 +23,7 @@ public class ReservationResponse {
 
     LocalTime endTime;
 
-    Integer people;
+    int people;
 
     String purpose;
 

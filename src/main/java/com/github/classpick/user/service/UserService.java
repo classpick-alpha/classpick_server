@@ -25,7 +25,7 @@ public class UserService {
         return UserResponse.from(userGetter.getUser());
     }
 
-    public SafeUserResponse getUserInfo(Long userId) {
+    public SafeUserResponse getUserById(Long userId) {
 
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));

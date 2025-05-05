@@ -25,10 +25,13 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @Operation(summary = "예약 생성")
-    @PostMapping("/v0.0/reservations")
-    public Response<ReservationResponse> createReservation(@Valid @RequestBody Request<CreateReservationRequest> body) {
+    @PostMapping("/v0.0/reservations/{roomId}")
+    public Response<ReservationResponse> createReservation(
+            @PathVariable Long roomId,
+            @Valid @RequestBody Request<CreateReservationRequest> body
+    ) {
 
-        return Response.ok(reservationService.createReservation(body.getData()));
+        return Response.ok(reservationService.createReservation(roomId, body.getData()));
     }
 
     @Operation(summary = "예약 취소")
