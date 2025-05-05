@@ -12,16 +12,24 @@ import java.util.List;
 public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
 
     @Query("""
-            select room from RoomEntity room
-            where room.placeName = :placeName
-            and room.capacity >= :capacity
-            and not exists (
-                select rsv from ReservationEntity rsv
-                where rsv.room = room
-                and (rsv.status = 'APPROVED' or rsv.status = 'REQUESTED')
-                and rsv.date = :date
-                and (:startTime < rsv.endTime and :endTime > rsv.startTime)
-            )
+            select r
+            from RoomEntity r
+            where r.placeName = coalesce(:placeName, r.placeName)
+              and r.capacity  >= coalesce(:capacity,  r.capacity)
+              and (
+                   :date      is null
+                or :startTime is null
+                or :endTime   is null
+                or not exists (
+                    select 1
+                    from ReservationEntity re
+                    where re.room   = r
+                      and re.status in ('APPROVED','REQUESTED')
+                      and re.date   = :date
+                      and :startTime < re.endTime
+                      and :endTime   > re.startTime
+                )
+              )
             """)
     List<RoomEntity> findAllWithFilter(
             String placeName,
@@ -30,4 +38,5 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
             LocalTime startTime,
             LocalTime endTime
     );
+
 }

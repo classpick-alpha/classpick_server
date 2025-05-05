@@ -15,6 +15,7 @@ public class RoomTimeTableResponse {
     RoomResponse room;
     Collection<DailyReservation> weekly;
 
+    @Getter
     @AllArgsConstructor(staticName = "of")
     public static class DailyReservation {
 
@@ -22,8 +23,9 @@ public class RoomTimeTableResponse {
         Collection<TimeReservations> reservations;
     }
 
+    @Getter
     @AllArgsConstructor(staticName = "of")
-    public static final class TimeReservations {
+    public static class TimeReservations {
 
         LocalTime startTime;
         LocalTime endTime;
