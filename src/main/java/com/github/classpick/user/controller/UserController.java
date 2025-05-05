@@ -22,7 +22,7 @@ public class UserController {
     @GetMapping("/v0.0/users/{userId}")
     public Response<GetUserInfoRes> getUserId(@PathVariable Long userId) {
         Long userInfo = userService.getUserInfo(userId);
-        return Response.of(200, "success", GetUserInfoRes.of(userInfo));
+        return Response.ok(GetUserInfoRes.of(userInfo));
     }
 
     @PutMapping("/v0.0/users/info")
@@ -30,6 +30,6 @@ public class UserController {
                                                    @Valid @RequestBody UpdateUserInfoReq updateUserInfoReq)
     {
         Long userId = userService.updateUserInfo(userDetails.getUser().getUserId(), updateUserInfoReq);
-        return Response.of(200, "success", GetUserInfoRes.of(userId));
+        return Response.ok(GetUserInfoRes.of(userId));
     }
 }

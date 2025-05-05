@@ -31,7 +31,7 @@ public class DefaultFileController {
             @RequestParam("userId") Long userId) {
 
         defaultFileService.saveDefaultFile(file, userId);
-        return Response.of(200, "success", null);
+        return Response.ok();
     }
 
     // TODO: userId를 직접 받는 것은 보안 상 위험함으로,
@@ -39,13 +39,13 @@ public class DefaultFileController {
     @GetMapping("/v0.0/file/{userID}")
     public Response<List<GetDefaultFileInfoRes>> getDefaultFile(@PathVariable Long userID) {
         List<DefaultFileEntity> fileList = defaultFileService.getDefaultFile(userID);
-        return Response.of(200, "success", GetDefaultFileInfoRes.of(fileList));
+        return Response.ok(GetDefaultFileInfoRes.of(fileList));
     }
 
     @DeleteMapping("/v0.0/file/{fileId}")
     public Response<Void> deleteDefaultFile(@PathVariable Long fileId) {
         defaultFileService.deleteDefaultFile(fileId);
-        return Response.of(200, "success", null);
+        return Response.ok();
     }
 
 }

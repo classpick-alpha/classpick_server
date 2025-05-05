@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
+
     @ExceptionHandler(CustomException.class)
-    public Response <Void> handleCustomException(CustomException e) {
-        return Response.of(e.getStatus(), e.getMessage(), null);
+    public Response<Void> handleCustomException(CustomException exception) {
+
+        return Response.error(exception);
     }
 }
