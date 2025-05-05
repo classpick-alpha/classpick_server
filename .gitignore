@@ -43,5 +43,6 @@ out/
 .AppleDouble
 .LSOverride
 
-### Production Level ###
-src/main/resources/application-prod.yml
+### Configuration Level ###
+src/main/resources/application-*.yml
+!src/main/resources/application-local.yml

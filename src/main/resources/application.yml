@@ -1,4 +1,5 @@
 server:
+  forward-headers-strategy: NATIVE
   servlet:
     context-path: /api
     encoding:
@@ -8,38 +9,32 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/classpick_local
-    username: root
-    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    hibernate:
-      ddl-auto: create
-    defer-datasource-initialization: true
     open-in-view: true
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
-  sql:
-    init:
-      mode: always
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
 
-app:
-  jwt:
-    key: ${JWT_KEY}
-  oauth:
-    callback:
-      success: ${FRONTEND_HOSTNAME}/auth/oauth/callback/success
-      failure: ${FRONTEND_HOSTNAME}/auth/oauth/callback/failure
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    disable-swagger-default-url: true
+    display-request-duration: true
+    defaultModelsExpandDepth: -1
+    groups-order: asc
+    tags-sorter: alpha
+    operations-sorter: alpha
+  cache:
+    disabled: true
