@@ -1,6 +1,10 @@
 server:
   servlet:
     context-path: /api
+    encoding:
+      enabled: true
+      force: true
+      charset: utf-8
 
 spring:
   datasource:
