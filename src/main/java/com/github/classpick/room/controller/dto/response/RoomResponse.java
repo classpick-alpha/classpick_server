@@ -11,8 +11,8 @@ public class RoomResponse {
     long roomId;
     String image;
     String placeName;
-    int unitNumber;
-    int capacity;
+    String unitNumber;
+    Integer capacity;
 
     public static RoomResponse from(RoomEntity room) {
 

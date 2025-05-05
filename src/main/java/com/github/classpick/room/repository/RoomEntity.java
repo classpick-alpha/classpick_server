@@ -30,9 +30,9 @@ public class RoomEntity extends BaseTimeEntity {
     private String placeName;
 
     @NotNull
-    private Integer unitNumber;
+    private String unitNumber;
 
-    @NotNull
+    @Nullable
     private Integer capacity;
 
     @Nullable
