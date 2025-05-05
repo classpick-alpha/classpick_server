@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -28,4 +29,5 @@ public record RoomFilterRequest(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
         LocalTime endTime
 ) {
+
 }

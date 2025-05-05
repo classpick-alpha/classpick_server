@@ -2,10 +2,11 @@ package com.github.classpick.reservation.controller.dto.request;
 
 import com.github.classpick.reservation.repository.Status;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @AllArgsConstructor(staticName = "of")

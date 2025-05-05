@@ -26,19 +26,18 @@ public class RoomController {
     public Response<RoomListResponse> getRooms(
             @RequestParam @Valid RoomFilterRequest request
     ) {
+
         return Response.ok(roomService.getRoomList(request));
     }
 
-    @Operation(
-            summary = "강의실 타임테이블 조회",
-            description = "사용자가 선택한 날짜를 기준으로, 해당 주차(월~금) 동안의 강의실 예약 타임테이블을 조회합니다. " +
-                    "날짜를 지정하지 않으면 기본적으로 오늘 날짜를 기준으로 조회합니다."
-    )
+    @Operation(summary = "강의실 타임테이블 조회", description = "사용자가 선택한 날짜를 기준으로, 해당 주차(월~금) 동안의 강의실 예약 타임테이블을 조회합니다. " +
+            "날짜를 지정하지 않으면 기본적으로 오늘 날짜를 기준으로 조회합니다.")
     @GetMapping("/v0.0/rooms/{roomId}")
     public Response<RoomTimeTableResponse> getRoomTimeTable(
             @PathVariable Long roomId,
             @Valid @ModelAttribute RoomTimeTableRequest request
-    ){
+    ) {
+
         return Response.ok(roomService.getRoomTimeTable(roomId, request));
     }
 

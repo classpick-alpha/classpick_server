@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class SaveDefaultFileRes {
+
     private final String fileName;
     private final String filePath;
 

@@ -4,11 +4,12 @@ import com.github.classpick.reservation.repository.ReservationEntity;
 import com.github.classpick.reservation.repository.Status;
 import com.github.classpick.room.repository.RoomEntity;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @AllArgsConstructor
@@ -40,6 +41,7 @@ public class GetReservationListRes {
     private Integer capacity;
 
     public static GetReservationListRes fromEntity(ReservationEntity reservation) {
+
         RoomEntity room = reservation.getRoom();
         return GetReservationListRes.builder()
                 .reservationId(reservation.getReservationId())
