@@ -34,9 +34,9 @@ public class TokenProvider {
         return JWT.create().withIssuedAt(Instant.now()).withClaim("id", user.getUserId()).sign(algorithm);
     }
 
-    public String extractToken(String token) {
+    public long extractToken(String token) {
 
-        return JWT.require(algorithm).build().verify(token).getClaim("id").asString();
+        return JWT.require(algorithm).build().verify(token).getClaim("id").asLong();
     }
 
     public boolean validateToken(String token) {
@@ -53,7 +53,7 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String accessToken) {
 
-        String id = extractToken(accessToken);
+        String id = Long.toString(extractToken(accessToken));
         OAuth2GoogleUser userDetails = (OAuth2GoogleUser) customUserDetailsService.loadUserByUsername(id);
 
         return new UsernamePasswordAuthenticationToken(userDetails, accessToken, userDetails.getAuthorities());

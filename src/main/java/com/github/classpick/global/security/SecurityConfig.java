@@ -1,5 +1,6 @@
 package com.github.classpick.global.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.classpick.global.security.jwt.TokenAuthenticationFilter;
 import com.github.classpick.global.security.jwt.TokenProvider;
 import com.github.classpick.global.security.oauth.CustomOAuth2UserService;
@@ -22,10 +23,12 @@ public class SecurityConfig {
     private final OAuth2AuthenticationSuccessHandler successHandler;
     private final OAuth2AuthenticationFailureHandler failureHandle;
 
+    private final ObjectMapper objectMapper;
+
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
 
-        return new TokenAuthenticationFilter(tokenProvider);
+        return new TokenAuthenticationFilter(tokenProvider, objectMapper);
     }
 
     @Bean

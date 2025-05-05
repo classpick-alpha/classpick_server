@@ -19,6 +19,7 @@ import java.io.IOException;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void doFilterInternal(
@@ -53,7 +54,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         Response<?> apiResponse = Response.error(e);
 
-        String content = new ObjectMapper().writeValueAsString(apiResponse);
+        String content = objectMapper.writeValueAsString(apiResponse);
 
         response.addHeader("Content-Type", "application/json");
         response.getWriter().write(content);
