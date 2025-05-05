@@ -1,14 +1,13 @@
 package com.github.classpick.reservation.controller;
 
-import com.github.classpick.global.Request;
-import com.github.classpick.global.Response;
+import com.github.classpick.global.dto.Request;
+import com.github.classpick.global.dto.Response;
 import com.github.classpick.reservation.controller.dto.request.CancelReservationReq;
 import com.github.classpick.reservation.controller.dto.request.CreateReservationReq;
 import com.github.classpick.reservation.controller.dto.response.GetReservationListRes;
 import com.github.classpick.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController

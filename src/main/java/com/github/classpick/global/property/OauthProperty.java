@@ -1,15 +1,18 @@
 package com.github.classpick.global.property;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-@Getter
-@Setter
+@Data
 @Configuration
 @ConfigurationProperties(prefix = "app.oauth.callback")
-public class OauthCallbackProperty {
+public class OauthProperty {
+
+    @NotBlank
     private String success;
+
+    @NotBlank
     private String failure;
 }

@@ -1,6 +1,6 @@
 package com.github.classpick.global.security.oauth;
 
-import com.github.classpick.global.property.OauthCallbackProperty;
+import com.github.classpick.global.property.OauthProperty;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private final OauthCallbackProperty oauthCallbackProperty;
+    private final OauthProperty oauthProperty;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
@@ -25,7 +25,7 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
         log.error("OAuth2 로그인 실패: {}", exception.getMessage(), exception);
 
-        String redirectUrl = String.format("%s?error=OAUTH2_LOGIN_FAILED", oauthCallbackProperty.getFailure());
+        String redirectUrl = String.format("%s?error=OAUTH2_LOGIN_FAILED", oauthProperty.getFailure());
 
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }

@@ -1,6 +1,6 @@
 package com.github.classpick.user.controller;
 
-import com.github.classpick.global.Response;
+import com.github.classpick.global.dto.Response;
 import com.github.classpick.global.security.oauth.OAuth2GoogleUser;
 import com.github.classpick.user.controller.dto.GetUserInfoRes;
 import com.github.classpick.user.controller.dto.UpdateUserInfoReq;

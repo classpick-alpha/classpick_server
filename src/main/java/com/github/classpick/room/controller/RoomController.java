@@ -1,6 +1,6 @@
 package com.github.classpick.room.controller;
 
-import com.github.classpick.global.Response;
+import com.github.classpick.global.dto.Response;
 import com.github.classpick.room.controller.dto.request.RoomFilterRequest;
 import com.github.classpick.room.controller.dto.request.RoomTimeTableRequest;
 import com.github.classpick.room.controller.dto.response.RoomListResponse;

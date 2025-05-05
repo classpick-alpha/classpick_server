@@ -5,7 +5,7 @@ import com.github.classpick.default_file.controller.dto.GetDefaultFileInfoRes;
 import com.github.classpick.default_file.controller.dto.SaveDefaultFileRes;
 import com.github.classpick.default_file.repository.DefaultFileEntity;
 import com.github.classpick.default_file.service.DefaultFileService;
-import com.github.classpick.global.Response;
+import com.github.classpick.global.dto.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

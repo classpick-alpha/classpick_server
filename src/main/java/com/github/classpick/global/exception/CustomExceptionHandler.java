@@ -1,6 +1,6 @@
 package com.github.classpick.global.exception;
 
-import com.github.classpick.global.Response;
+import com.github.classpick.global.dto.Response;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

@@ -1,6 +1,6 @@
 package com.github.classpick.global.security.oauth;
 
-import com.github.classpick.global.property.OauthCallbackProperty;
+import com.github.classpick.global.property.OauthProperty;
 import com.github.classpick.global.security.jwt.TokenProvider;
 import com.github.classpick.user.repository.Role;
 import com.github.classpick.user.repository.UserEntity;
@@ -21,7 +21,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final TokenProvider tokenProvider;
     private final UserRepository userRepository;
-    private final OauthCallbackProperty oauthCallbackProperty;
+    private final OauthProperty oauthProperty;
 
     private final String KOOKMIN_EMAIL_REGEX = ".*@kookmin\\.ac\\.kr$";
 
@@ -32,7 +32,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String email = oAuth2User.getEmail();
 
         if (!email.matches(KOOKMIN_EMAIL_REGEX)) {
-            getRedirectStrategy().sendRedirect(request, response, String.format("%s?error=NOT_KOOKMIN_EMAIL", oauthCallbackProperty.getFailure()));
+            getRedirectStrategy().sendRedirect(request, response, String.format("%s?error=NOT_KOOKMIN_EMAIL", oauthProperty.getFailure()));
             return;
         }
 
@@ -50,11 +50,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             ));
 
         if (Objects.isNull(user)) {
-            getRedirectStrategy().sendRedirect(request, response, String.format("%s?error=USER_CREATION_FAILED", oauthCallbackProperty.getFailure()));
+            getRedirectStrategy().sendRedirect(request, response, String.format("%s?error=USER_CREATION_FAILED", oauthProperty.getFailure()));
             return;
         }
 
         String accessToken = tokenProvider.generateToken(user);
-        getRedirectStrategy().sendRedirect(request, response, String.format("%s?token=%s&isNewUser=%s", oauthCallbackProperty.getSuccess(), accessToken, isNewUser));
+        getRedirectStrategy().sendRedirect(request, response, String.format("%s?token=%s&isNewUser=%s", oauthProperty.getSuccess(), accessToken, isNewUser));
     }
 }
