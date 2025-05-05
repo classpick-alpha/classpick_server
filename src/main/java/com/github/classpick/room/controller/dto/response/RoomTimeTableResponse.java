@@ -1,62 +1,32 @@
 package com.github.classpick.room.controller.dto.response;
 
 import com.github.classpick.reservation.repository.Status;
-import com.github.classpick.room.repository.RoomEntity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Collection;
 
 @Getter
-@AllArgsConstructor
-@Builder
+@AllArgsConstructor(staticName = "of")
 public class RoomTimeTableResponse {
 
-    private long roomId;
-    private String roomName;
-    private List<DailyReservation> weeklyReservations;
+    RoomResponse room;
+    Collection<DailyReservation> weekly;
 
-    public static RoomTimeTableResponse from(RoomEntity roomEntity, List<DailyReservation> weeklyReservations) {
+    @AllArgsConstructor(staticName = "of")
+    public static class DailyReservation {
 
-        String roomName = roomEntity.getPlaceName() + " " + roomEntity.getUnitNumber();
-        return RoomTimeTableResponse.builder()
-                .roomId(roomEntity.getRoomId())
-                .roomName(roomName)
-                .weeklyReservations(weeklyReservations)
-                .build();
+        LocalDate date;
+        Collection<TimeReservations> reservations;
     }
 
-    @Getter
-    @AllArgsConstructor
-    @Builder
-    public static final class DailyReservation {
-
-        private final LocalDate date;
-        private final List<TimeReservations> timeReservations;
-
-
-        @Builder
-        public static DailyReservation from(LocalDate date, List<TimeReservations> timeReservations) {
-
-            return new DailyReservation(date, timeReservations);
-        }
-    }
-
-    @Getter
-    @AllArgsConstructor
-    @Builder
+    @AllArgsConstructor(staticName = "of")
     public static final class TimeReservations {
 
-        private final LocalTime startTime;
-        private final LocalTime endTime;
-        private final Status status;
-
-        public static TimeReservations from(LocalTime startTime, LocalTime endTime, Status status) {
-
-            return new TimeReservations(startTime, endTime, status);
-        }
+        LocalTime startTime;
+        LocalTime endTime;
+        Status status;
     }
 }

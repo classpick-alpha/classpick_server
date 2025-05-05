@@ -1,6 +1,9 @@
 package com.github.classpick.user.service;
 
-import com.github.classpick.user.controller.dto.UpdateUserInfoReq;
+import com.github.classpick.global.user.UserGetter;
+import com.github.classpick.user.controller.dto.request.UpdateUserRequest;
+import com.github.classpick.user.controller.dto.response.SafeUserResponse;
+import com.github.classpick.user.controller.dto.response.UserResponse;
 import com.github.classpick.user.exception.UserException;
 import com.github.classpick.user.exception.UserExceptionCode;
 import com.github.classpick.user.repository.UserEntity;
@@ -15,24 +18,30 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Long getUserInfo(Long userId) {
+    private final UserGetter userGetter;
+
+    public UserResponse getMe() {
+
+        return UserResponse.from(userGetter.getUser());
+    }
+
+    public SafeUserResponse getUserInfo(Long userId) {
 
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));
 
-        return userEntity.getUserId();
+        return SafeUserResponse.from(userEntity);
     }
 
     @Transactional
-    public Long updateUserInfo(Long userId, UpdateUserInfoReq request) {
+    public UserResponse updateUserInfo(UpdateUserRequest request) {
 
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));
+        UserEntity userEntity = userGetter.getUser();
 
         userEntity.setUserGroup(request.getUserGroup());
         userEntity.setSchoolNumber(request.getSchoolNumber());
         userEntity.setPhoneNumber(request.getPhoneNumber());
 
-        return userEntity.getUserId();
+        return UserResponse.from(userEntity);
     }
 }

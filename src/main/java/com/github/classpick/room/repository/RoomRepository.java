@@ -2,7 +2,6 @@ package com.github.classpick.room.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -25,10 +24,10 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
             )
             """)
     List<RoomEntity> findAllWithFilter(
-            @Param("placeName") String placeName,
-            @Param("capacity") Integer capacity,
-            @Param("date") LocalDate date,
-            @Param("startTime") LocalTime startTime,
-            @Param("endTime") LocalTime endTime
+            String placeName,
+            Integer capacity,
+            LocalDate date,
+            LocalTime startTime,
+            LocalTime endTime
     );
 }

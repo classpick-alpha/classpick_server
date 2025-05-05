@@ -1,33 +1,32 @@
 package com.github.classpick.room.controller.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record RoomFilterRequest(
-        @Nullable
-        String placeName,
+@Getter
+@AllArgsConstructor(staticName = "of")
+public class RoomFilterRequest {
 
-        @Min(1)
-        @Max(99)
-        @Nullable
-        Integer capacity,
+    @Nullable
+    String placeName;
 
-        @Nullable
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        LocalDate date,
+    @Nullable
+    @Min(1)
+    @Max(99)
+    Integer capacity;
 
-        @Nullable
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-        LocalTime startTime,
+    @Nullable
+    LocalDate date;
 
-        @Nullable
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-        LocalTime endTime
-) {
+    @Nullable
+    LocalTime startTime;
 
+    @Nullable
+    LocalTime endTime;
 }

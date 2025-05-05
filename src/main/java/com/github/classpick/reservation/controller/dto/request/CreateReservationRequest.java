@@ -1,6 +1,8 @@
 package com.github.classpick.reservation.controller.dto.request;
 
-import com.github.classpick.reservation.repository.Status;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,16 +12,16 @@ import java.time.LocalTime;
 
 @Getter
 @AllArgsConstructor(staticName = "of")
-public class CreateReservationReq {
+public class CreateReservationRequest {
 
-    @NotNull
-    private Long roomId;
+    private long roomId;
 
-    @NotNull
+    @NotBlank
     private String purpose;
 
-    @NotNull
-    private Integer people;
+    @Min(1)
+    @Max(99)
+    private int people;
 
     @NotNull
     private LocalDate date;
@@ -30,8 +32,6 @@ public class CreateReservationReq {
     @NotNull
     private LocalTime endTime;
 
-    @NotNull
-    private Status status;
-
+    @NotBlank
     private String comment;
 }

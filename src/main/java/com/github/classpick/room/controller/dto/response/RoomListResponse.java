@@ -1,25 +1,13 @@
 package com.github.classpick.room.controller.dto.response;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Collection;
 
-@Builder
-public record RoomListResponse(
-        Collection<RoomInfo> rooms
-) {
+@Getter
+@AllArgsConstructor(staticName = "of")
+public class RoomListResponse {
 
-    @Builder
-    public record RoomInfo(
-            long roomId,
-            String image,
-            int unitNumber
-    ) {
-
-        public static RoomInfo of(long roomId, String image, int unitNumber) {
-
-            return new RoomInfo(roomId, image, unitNumber);
-        }
-    }
-
+    Collection<RoomResponse> rooms;
 }

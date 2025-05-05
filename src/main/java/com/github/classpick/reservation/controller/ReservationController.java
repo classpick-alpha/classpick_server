@@ -2,11 +2,12 @@ package com.github.classpick.reservation.controller;
 
 import com.github.classpick.global.dto.Request;
 import com.github.classpick.global.dto.Response;
-import com.github.classpick.reservation.controller.dto.request.CancelReservationReq;
-import com.github.classpick.reservation.controller.dto.request.CreateReservationReq;
-import com.github.classpick.reservation.controller.dto.response.GetReservationListRes;
+import com.github.classpick.reservation.controller.dto.request.CreateReservationRequest;
+import com.github.classpick.reservation.controller.dto.response.ReservationListResponse;
+import com.github.classpick.reservation.controller.dto.response.ReservationResponse;
 import com.github.classpick.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,38 +15,35 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
+@Tag(name = "예약")
 @RequiredArgsConstructor
 @RestController
 public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @Operation(summary = "예약 생성", description = "사용자가 강의실 예약을 생성합니다.")
+    @Operation(summary = "예약 생성")
     @PostMapping("/v0.0/reservations")
-    public Response<Void> createReservation(@Valid @RequestBody Request<CreateReservationReq> createReservationReq) {
+    public Response<ReservationResponse> createReservation(@Valid @RequestBody Request<CreateReservationRequest> body) {
 
-        reservationService.createReservation(createReservationReq.getData());
-        return Response.ok();
+        return Response.ok(reservationService.createReservation(body.getData()));
     }
 
-    @Operation(summary = "예약 취소", description = "사용자가 강의실 예약을 취소합니다.")
+    @Operation(summary = "예약 취소")
     @DeleteMapping("/v0.0/reservations/{reservationId}")
-    public Response<Void> cancelReservation(@PathVariable Long reservationId, @RequestParam Long userId) {
+    public Response<Void> cancelReservation(@PathVariable Long reservationId) {
 
-        reservationService.cancelReservation(CancelReservationReq.of(reservationId, userId));
+        reservationService.cancelReservation(reservationId);
+
         return Response.ok();
     }
 
-    @Operation(summary = "예약 목록", description = "강의실 예약 목록을 가져옵니다.")
+    @Operation(summary = "예약 목록")
     @GetMapping("/v0.0/reservations")
-    public Response<List<GetReservationListRes>> getReservationsList(@RequestParam Long userId) {
+    public Response<ReservationListResponse> getReservationsList() {
 
-        List<GetReservationListRes> getReservationListRes = reservationService.getReservationsList(userId);
-        return Response.ok(getReservationListRes);
+        return Response.ok(reservationService.getReservationsList());
     }
 }

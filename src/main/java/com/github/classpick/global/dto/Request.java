@@ -5,10 +5,10 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor(staticName = "of")
 @Getter
+@AllArgsConstructor(staticName = "of")
 public class Request<Data> {
 
-    private LocalDateTime timestamp;
-    private Data data;
+    LocalDateTime timestamp;
+    Data data;
 }

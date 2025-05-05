@@ -6,8 +6,8 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor(staticName = "of")
 @Getter
+@AllArgsConstructor(staticName = "of")
 public class Response<Data> {
 
     private int status;

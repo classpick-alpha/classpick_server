@@ -3,8 +3,8 @@ package com.github.classpick.room.service;
 import com.github.classpick.reservation.repository.ReservationEntity;
 import com.github.classpick.reservation.repository.ReservationRepository;
 import com.github.classpick.room.controller.dto.request.RoomFilterRequest;
-import com.github.classpick.room.controller.dto.request.RoomTimeTableRequest;
 import com.github.classpick.room.controller.dto.response.RoomListResponse;
+import com.github.classpick.room.controller.dto.response.RoomResponse;
 import com.github.classpick.room.controller.dto.response.RoomTimeTableResponse;
 import com.github.classpick.room.exception.RoomException;
 import com.github.classpick.room.exception.RoomExceptionCode;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,55 +28,48 @@ public class RoomService {
 
     public RoomListResponse getRoomList(RoomFilterRequest dto) {
 
-        List<RoomListResponse.RoomInfo> rooms = roomRepository.findAllWithFilter(
-                        dto.placeName(),
-                        dto.capacity(),
-                        dto.date(),
-                        dto.startTime(),
-                        dto.endTime()
+        List<RoomResponse> rooms = roomRepository.findAllWithFilter(
+                        dto.getPlaceName(),
+                        dto.getCapacity(),
+                        dto.getDate(),
+                        dto.getStartTime(),
+                        dto.getEndTime()
                 )
                 .stream()
-                .map(room -> RoomListResponse.RoomInfo.of(room.getRoomId(), room.getImage(), room.getUnitNumber()))
+                .map(RoomResponse::from)
                 .toList();
 
-        return RoomListResponse.builder().rooms(rooms).build();
+        return RoomListResponse.of(rooms);
     }
 
-    public RoomTimeTableResponse getRoomTimeTable(Long roomId, RoomTimeTableRequest dto) {
+    public RoomTimeTableResponse getRoomTimeTable(Long roomId, LocalDate baseDate) {
 
         RoomEntity room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND));
-        LocalDate baseDate = dto.date() != null ? dto.date() : LocalDate.now();
+
         LocalDate monday = baseDate.with(DayOfWeek.MONDAY);
         LocalDate friday = baseDate.with(DayOfWeek.FRIDAY);
 
-        List<ReservationEntity> reservationsOfWeek = reservationRepository.findAllByRoom_RoomIdAndDateBetween(
-                roomId,
+        Map<LocalDate, List<ReservationEntity>> reservationsByDate =
+                reservationRepository.findAllByRoom_RoomIdAndDateBetween(roomId,
                 monday,
                 friday
-        );
+        ).stream().collect(Collectors.groupingBy(ReservationEntity::getDate));
 
-        Map<LocalDate, List<ReservationEntity>> reservationsByDate = reservationsOfWeek.stream()
-                .collect(Collectors.groupingBy(ReservationEntity::getDate));
+        List<RoomTimeTableResponse.DailyReservation> dailyReservations = monday.datesUntil(friday.plusDays(1))
+                .map(date -> RoomTimeTableResponse.DailyReservation.of(
+                        date,
+                        reservationsByDate.getOrDefault(date, List.of())
+                                .stream()
+                                .map(reservation -> RoomTimeTableResponse.TimeReservations.of(
+                                        reservation.getStartTime(),
+                                        reservation.getEndTime(),
+                                        reservation.getStatus()
+                                ))
+                                .toList()
+                ))
+                .toList();
 
-        List<LocalDate> datesOfWeek = monday.datesUntil(friday.plusDays(1)).toList();
-
-        List<RoomTimeTableResponse.DailyReservation> dailyReservations = new ArrayList<>();
-
-        for (LocalDate date : datesOfWeek) {
-            List<ReservationEntity> reservationsOnDate = reservationsByDate.getOrDefault(date, List.of());
-
-            List<RoomTimeTableResponse.TimeReservations> timeReservations = new ArrayList<>();
-            for (ReservationEntity reservation : reservationsOnDate) {
-                timeReservations.add(RoomTimeTableResponse.TimeReservations.from(
-                        reservation.getStartTime(),
-                        reservation.getEndTime(),
-                        reservation.getStatus()
-                ));
-            }
-            dailyReservations.add(RoomTimeTableResponse.DailyReservation.from(date, timeReservations));
-        }
-        return RoomTimeTableResponse.from(room, dailyReservations);
+        return RoomTimeTableResponse.of(RoomResponse.from(room), dailyReservations);
     }
-
 }
