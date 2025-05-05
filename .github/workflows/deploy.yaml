@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - refactor/daehyeon
 
 jobs:
   build_image:
