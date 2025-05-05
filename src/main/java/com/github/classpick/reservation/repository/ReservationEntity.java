@@ -12,46 +12,54 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
+@Getter
+@Setter
 @Builder
-@Data
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class ReservationEntity extends BaseTimeEntity {
 
-    @NotNull
-    LocalDate date;
-    @NotNull
-    LocalTime startTime;
-    @NotNull
-    LocalTime endTime;
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long reservationId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private RoomEntity room;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @NotNull
+    LocalDate date;
+
+    @NotNull
+    LocalTime startTime;
+
+    @NotNull
+    LocalTime endTime;
+
+    @NotNull
+    private Integer people;
+
     @NotNull
     private String purpose;
 
-    @NotNull
-    private Long people;
-
     private String comment;
-
-
 }

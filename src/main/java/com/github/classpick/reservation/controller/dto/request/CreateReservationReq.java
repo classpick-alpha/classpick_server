@@ -19,7 +19,7 @@ public class CreateReservationReq {
     private String purpose;
 
     @NotNull
-    private Long people;
+    private Integer people;
 
     @NotNull
     private LocalDate date;

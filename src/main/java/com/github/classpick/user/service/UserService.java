@@ -19,6 +19,7 @@ public class UserService {
 
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));
+
         return userEntity.getUserId();
     }
 
@@ -28,7 +29,9 @@ public class UserService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));
 
-        userEntity.updateUserInfo(request.getUserGroup(), request.getSchoolNumber(), request.getPhoneNumber());
+        userEntity.setUserGroup(request.getUserGroup());
+        userEntity.setSchoolNumber(request.getSchoolNumber());
+        userEntity.setPhoneNumber(request.getPhoneNumber());
 
         return userEntity.getUserId();
     }

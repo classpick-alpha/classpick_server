@@ -85,5 +85,4 @@ public class ReservationService {
 
         return reservationRepository.findByUser_UserId(userId).stream().map(GetReservationListRes::fromEntity).toList();
     }
-
 }

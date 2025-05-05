@@ -20,13 +20,12 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
                   AND re.endTime > :startTime
             """)
     boolean checkAvailableRoom(
-            @Param("roomId") Long roomId,
+            @Param("roomId") long roomId,
             @Param("date") LocalDate date,
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime
     );
 
     List<ReservationEntity> findByUser_UserId(Long userId);
-
     List<ReservationEntity> findAllByRoom_RoomIdAndDateBetween(Long roomId, LocalDate startDate, LocalDate endDate);
 }

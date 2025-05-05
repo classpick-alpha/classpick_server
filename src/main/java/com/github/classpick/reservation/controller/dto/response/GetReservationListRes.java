@@ -26,7 +26,7 @@ public class GetReservationListRes {
     @NotNull
     private LocalTime endTime;
     @NotNull
-    private Long people;
+    private Integer people;
     @NotNull
     private String purpose;
     @NotNull

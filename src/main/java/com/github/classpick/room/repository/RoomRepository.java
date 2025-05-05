@@ -31,6 +31,4 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime
     );
-
-
 }
