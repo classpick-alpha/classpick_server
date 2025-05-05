@@ -1,16 +1,16 @@
-package com.github.classpick.security.jwt;
+package com.github.classpick.global.security.jwt;
 
-import com.github.classpick.security.exception.JwtAuthenticationException;
+import com.github.classpick.global.security.exception.JwtAuthenticationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import org.springframework.security.core.Authentication;
 import java.io.IOException;
 
 @RequiredArgsConstructor

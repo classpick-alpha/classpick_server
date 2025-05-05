@@ -1,4 +1,4 @@
-package com.github.classpick.security.oauth;
+package com.github.classpick.global.security.oauth;
 
 import com.github.classpick.user.repository.UserEntity;
 import lombok.Getter;

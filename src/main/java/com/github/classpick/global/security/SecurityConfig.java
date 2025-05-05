@@ -1,10 +1,10 @@
-package com.github.classpick.security;
+package com.github.classpick.global.security;
 
-import com.github.classpick.security.jwt.TokenAuthenticationFilter;
-import com.github.classpick.security.jwt.TokenProvider;
-import com.github.classpick.security.oauth.CustomOAuth2UserService;
-import com.github.classpick.security.oauth.OAuth2AuthenticationFailureHandler;
-import com.github.classpick.security.oauth.OAuth2AuthenticationSuccessHandler;
+import com.github.classpick.global.security.jwt.TokenAuthenticationFilter;
+import com.github.classpick.global.security.jwt.TokenProvider;
+import com.github.classpick.global.security.oauth.CustomOAuth2UserService;
+import com.github.classpick.global.security.oauth.OAuth2AuthenticationFailureHandler;
+import com.github.classpick.global.security.oauth.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

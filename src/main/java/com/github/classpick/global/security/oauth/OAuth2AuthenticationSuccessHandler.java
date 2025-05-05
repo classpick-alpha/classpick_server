@@ -1,16 +1,16 @@
-package com.github.classpick.security.oauth;
+package com.github.classpick.global.security.oauth;
 
-import com.github.classpick.property.OauthCallbackProperty;
-import com.github.classpick.security.jwt.TokenProvider;
+import com.github.classpick.global.property.OauthCallbackProperty;
+import com.github.classpick.global.security.jwt.TokenProvider;
 import com.github.classpick.user.repository.Role;
 import com.github.classpick.user.repository.UserEntity;
 import com.github.classpick.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Objects;

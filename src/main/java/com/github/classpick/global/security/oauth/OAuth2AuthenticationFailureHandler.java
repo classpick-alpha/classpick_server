@@ -1,14 +1,14 @@
-package com.github.classpick.security.oauth;
+package com.github.classpick.global.security.oauth;
 
-import com.github.classpick.property.OauthCallbackProperty;
+import com.github.classpick.global.property.OauthCallbackProperty;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j

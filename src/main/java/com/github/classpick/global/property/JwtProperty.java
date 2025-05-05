@@ -1,4 +1,4 @@
-package com.github.classpick.property;
+package com.github.classpick.global.property;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

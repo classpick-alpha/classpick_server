@@ -1,15 +1,15 @@
-package com.github.classpick.security.oauth;
+package com.github.classpick.global.security.oauth;
 
-import com.github.classpick.security.jwt.TokenProvider;
+import com.github.classpick.global.security.jwt.TokenProvider;
 import com.github.classpick.user.repository.Role;
 import com.github.classpick.user.repository.UserEntity;
 import com.github.classpick.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 
 @Service
 @RequiredArgsConstructor

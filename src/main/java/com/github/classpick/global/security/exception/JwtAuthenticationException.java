@@ -1,4 +1,4 @@
-package com.github.classpick.security.exception;
+package com.github.classpick.global.security.exception;
 
 import com.github.classpick.global.CustomException;
 
