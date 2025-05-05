@@ -1,9 +1,9 @@
-package com.github.classpick.defaultfile.service;
+package com.github.classpick.default_file.service;
 
-import com.github.classpick.defaultfile.exception.DefaultFileException;
-import com.github.classpick.defaultfile.exception.DefaultFileExceptionCode;
-import com.github.classpick.defaultfile.repository.DefaultFileEntity;
-import com.github.classpick.defaultfile.repository.DefaultFileRepository;
+import com.github.classpick.default_file.exception.DefaultFileException;
+import com.github.classpick.default_file.exception.DefaultFileExceptionCode;
+import com.github.classpick.default_file.repository.DefaultFileEntity;
+import com.github.classpick.default_file.repository.DefaultFileRepository;
 import com.github.classpick.user.exception.UserException;
 import com.github.classpick.user.exception.UserExceptionCode;
 import com.github.classpick.user.repository.UserEntity;

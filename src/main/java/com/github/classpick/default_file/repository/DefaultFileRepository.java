@@ -1,4 +1,4 @@
-package com.github.classpick.defaultfile.repository;
+package com.github.classpick.default_file.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

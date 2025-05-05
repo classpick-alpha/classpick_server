@@ -1,6 +1,6 @@
-package com.github.classpick.defaultfile.controller.dto;
+package com.github.classpick.default_file.controller.dto;
 
-import com.github.classpick.defaultfile.repository.DefaultFileEntity;
+import com.github.classpick.default_file.repository.DefaultFileEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

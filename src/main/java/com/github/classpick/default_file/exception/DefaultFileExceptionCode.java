@@ -1,4 +1,4 @@
-package com.github.classpick.defaultfile.exception;
+package com.github.classpick.default_file.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
