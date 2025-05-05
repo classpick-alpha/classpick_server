@@ -1,5 +1,6 @@
 package com.github.classpick.reservation.service;
 
+import com.github.classpick.global.user.UserGetter;
 import com.github.classpick.reservation.controller.dto.request.CancelReservationReq;
 import com.github.classpick.reservation.controller.dto.request.CreateReservationReq;
 import com.github.classpick.reservation.controller.dto.response.GetReservationListRes;
@@ -31,13 +32,10 @@ public class ReservationService {
     private final RoomRepository roomRepository;
     private final UserGetter userGetter;
 
-    // TODO: userId를 직접 받는 것은 보안 상 위험함으로,
-    //  추후 인증 구현 후 JWT 토큰에서 사용자 정보 추출하는 방식으로 수정
     @Transactional
     public void createReservation(CreateReservationReq createReservationReq) {
 
-        Long userId = userGetter.getUserId();
-        UserEntity userEntity = userGetter.getUserEntity();
+        UserEntity user = userGetter.getUser();
 
         RoomEntity room = roomRepository.findById(createReservationReq.getRoomId())
                 .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND));
@@ -53,7 +51,7 @@ public class ReservationService {
         }
 
         ReservationEntity reservation = ReservationEntity.builder()
-                .user(userEntity)
+                .user(user)
                 .room(room)
                 .purpose(createReservationReq.getPurpose())
                 .people(createReservationReq.getPeople())
