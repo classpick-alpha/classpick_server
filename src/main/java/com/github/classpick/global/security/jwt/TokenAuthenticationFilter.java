@@ -1,5 +1,7 @@
 package com.github.classpick.global.security.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.classpick.global.dto.Response;
 import com.github.classpick.global.security.exception.JwtAuthenticationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -41,24 +43,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String extractToken(HttpServletRequest request) {
+
         String authorization = request.getHeader("Authorization");
 
-        return (authorization != null && authorization.startsWith("Bearer "))
-                ? authorization.substring(7)
-                : null;
+        return (authorization != null && authorization.startsWith("Bearer ")) ? authorization.substring(7) : null;
     }
 
     private void handleException(HttpServletResponse response, JwtAuthenticationException e) throws IOException {
-        response.setStatus(e.getStatus());
-        response.setContentType("application/json");
 
-        String errorResponse = String.format(
-                "{\"status\": %d, \"message\": \"%s\"}",
-                e.getStatus(),
-                e.getMessage()
-        );
+        Response<?> apiResponse = Response.error(e);
 
-        response.getWriter().write(errorResponse);
+        String content = new ObjectMapper().writeValueAsString(apiResponse);
+
+        response.addHeader("Content-Type", "application/json");
+        response.getWriter().write(content);
         response.getWriter().flush();
     }
 }

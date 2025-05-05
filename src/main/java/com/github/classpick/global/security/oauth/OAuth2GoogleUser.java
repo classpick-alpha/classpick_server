@@ -15,62 +15,67 @@ import java.util.Map;
 public class OAuth2GoogleUser implements OAuth2User, UserDetails {
 
     private final UserEntity user;
+    private final Map<String, Object> attributes;
+    private final Collection<? extends GrantedAuthority> authorities;
+
+    public OAuth2GoogleUser(OAuth2User user) {
+
+        this.user = null;
+        this.attributes = user.getAttributes();
+        this.authorities = user.getAuthorities();
+    }
 
     public OAuth2GoogleUser(UserEntity user) {
+
         this.user = user;
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return Map.of(
-                "userId", user.getUserId(),
-                "email", user.getEmail(),
-                "name", user.getName(),
-                "role", user.getRole().name()
-        );
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()));
-    }
-
-    @Override
-    public String getName() {
-        return user.getUserId().toString();
+        this.attributes = Collections.emptyMap();
+        this.authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_%s".formatted(user.getRole())));
     }
 
     @Override
     public String getPassword() {
-        return "";
+
+        return "(EMPTY)";
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+
+        return (String) attributes.get("sub");
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+
+        return UserDetails.super.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+
+        return UserDetails.super.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+
+        return UserDetails.super.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+
+        return UserDetails.super.isEnabled();
+    }
+
+    @Override
+    public String getName() {
+
+        return (String) attributes.get("name");
     }
 
     public String getEmail() {
-        return user.getEmail();
+
+        return (String) attributes.get("email");
     }
 }

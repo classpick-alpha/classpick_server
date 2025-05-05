@@ -1,32 +1,25 @@
 package com.github.classpick.global.security.oauth;
 
-import com.github.classpick.global.property.OauthProperty;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private final OauthProperty oauthProperty;
-
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
-                                        HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException {
+            HttpServletResponse response,
+            AuthenticationException exception
+    ) throws ServletException, IOException {
 
-        log.error("OAuth2 로그인 실패: {}", exception.getMessage(), exception);
-
-        String redirectUrl = String.format("%s?error=OAUTH2_LOGIN_FAILED", oauthProperty.getFailure());
-
-        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+        super.onAuthenticationFailure(request, response, exception);
     }
 }
