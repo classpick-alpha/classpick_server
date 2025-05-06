@@ -15,7 +15,10 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
             select r
             from RoomEntity r
             where r.placeName = coalesce(:placeName, r.placeName)
-              and r.capacity  >= coalesce(:capacity,  r.capacity)
+              and (
+                  :capacity is null
+                  or (r.capacity is not null and r.capacity >= :capacity)
+              )
               and (
                    :date      is null
                 or :startTime is null
