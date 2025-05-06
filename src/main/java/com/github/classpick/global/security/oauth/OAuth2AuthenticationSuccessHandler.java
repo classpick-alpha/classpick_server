@@ -45,7 +45,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         UserEntity user = userRepository.findByEmail(email)
                 .orElseGet(() -> userRepository.save(UserEntity.builder()
-                        .name(oauth2User.getName())
                         .role(Role.USER)
                         .email(oauth2User.getEmail())
                         .build()));

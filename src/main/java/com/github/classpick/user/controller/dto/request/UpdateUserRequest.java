@@ -5,12 +5,16 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import static com.github.classpick.global.regexp.RegExps.NAME;
 import static com.github.classpick.global.regexp.RegExps.PHONE_NUMBER;
 import static com.github.classpick.global.regexp.RegExps.SCHOOL_NUMBER;
 
 @Getter
 @AllArgsConstructor(staticName = "of")
 public class UpdateUserRequest {
+
+    @Pattern(regexp = NAME)
+    String name;
 
     @NotBlank
     String userGroup;

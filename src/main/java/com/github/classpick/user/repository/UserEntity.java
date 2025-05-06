@@ -29,7 +29,7 @@ public class UserEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @NotNull
+    @Nullable
     private String name;
 
     @NotNull

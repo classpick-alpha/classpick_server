@@ -38,6 +38,7 @@ public class UserService {
 
         UserEntity userEntity = userGetter.getUser();
 
+        userEntity.setName(request.getName());
         userEntity.setUserGroup(request.getUserGroup());
         userEntity.setSchoolNumber(request.getSchoolNumber());
         userEntity.setPhoneNumber(request.getPhoneNumber());
