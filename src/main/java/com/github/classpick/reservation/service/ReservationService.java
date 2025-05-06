@@ -30,19 +30,14 @@ public class ReservationService {
     private final UserGetter userGetter;
 
     @Transactional
-    public ReservationResponse createReservation(long roomId, CreateReservationRequest createReservationRequest) {
+    public ReservationResponse createReservation(long roomId, CreateReservationRequest dto) {
 
         UserEntity user = userGetter.getUser();
 
         RoomEntity room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND));
 
-        if (reservationRepository.checkAvailableRoom(
-                roomId,
-                createReservationRequest.getDate(),
-                createReservationRequest.getStartTime(),
-                createReservationRequest.getEndTime()
-        )) {
+        if (reservationRepository.checkAvailableRoom(roomId, dto.getDate(), dto.getStartTime(), dto.getEndTime())) {
 
             throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_EXIST);
         }
@@ -50,13 +45,16 @@ public class ReservationService {
         ReservationEntity reservation = ReservationEntity.builder()
                 .user(user)
                 .room(room)
-                .purpose(createReservationRequest.getPurpose())
-                .people(createReservationRequest.getPeople())
-                .startTime(createReservationRequest.getStartTime())
-                .endTime(createReservationRequest.getEndTime())
-                .comment(createReservationRequest.getComment())
+                .purpose(dto.getPurpose())
+                .people(dto.getPeople())
+                .date(dto.getDate())
+                .startTime(dto.getStartTime())
+                .endTime(dto.getEndTime())
+                .comment(dto.getComment())
                 .status(Status.REQUESTED)
                 .build();
+
+        reservation = reservationRepository.save(reservation);
 
         return ReservationResponse.from(reservation);
     }

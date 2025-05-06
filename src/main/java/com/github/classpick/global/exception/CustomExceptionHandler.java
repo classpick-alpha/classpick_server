@@ -18,15 +18,14 @@ import java.util.Objects;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler({ NoResourceFoundException.class, HttpRequestMethodNotSupportedException.class})
+    @ExceptionHandler({ NoResourceFoundException.class, HttpRequestMethodNotSupportedException.class })
     public Response<?> noResourceFoundException(Exception ignored) {
 
         return Response.error(new CustomException("요청하신 리소스를 찾을 수 없습니다.", 9001));
     }
 
     @ExceptionHandler({
-            HttpMessageNotReadableException.class,
-            MissingServletRequestParameterException.class,
+            HttpMessageNotReadableException.class, MissingServletRequestParameterException.class,
             MissingServletRequestPartException.class
     })
     public Response<?> httpMessageNotReadableException(Exception ignored) {
