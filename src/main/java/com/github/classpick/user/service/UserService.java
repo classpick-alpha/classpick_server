@@ -43,6 +43,8 @@ public class UserService {
         userEntity.setSchoolNumber(request.getSchoolNumber());
         userEntity.setPhoneNumber(request.getPhoneNumber());
 
+        userEntity = userRepository.save(userEntity);
+
         return UserResponse.from(userEntity);
     }
 }
