@@ -28,6 +28,5 @@ public class CreateReservationRequest {
     @NotBlank
     private String purpose;
 
-    @NotBlank
     private String comment;
 }
