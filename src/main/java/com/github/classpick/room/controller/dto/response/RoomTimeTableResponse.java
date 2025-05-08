@@ -1,12 +1,11 @@
 package com.github.classpick.room.controller.dto.response;
 
 import com.github.classpick.reservation.repository.Status;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collection;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of")
@@ -30,5 +29,13 @@ public class RoomTimeTableResponse {
         LocalTime startTime;
         LocalTime endTime;
         Status status;
+        User user;
+
+        @Getter
+        @AllArgsConstructor(staticName = "of")
+        public static class User {
+            long userId;
+            String name;
+        }
     }
 }
