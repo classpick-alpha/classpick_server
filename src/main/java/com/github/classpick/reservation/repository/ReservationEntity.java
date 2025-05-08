@@ -3,22 +3,35 @@ package com.github.classpick.reservation.repository;
 import com.github.classpick.global.entity.BaseTimeEntity;
 import com.github.classpick.room.repository.RoomEntity;
 import com.github.classpick.user.repository.UserEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-import lombok.*;
 
-import java.time.LocalDateTime;
-
-@Entity
+@Getter
+@Setter
 @Builder
-@Data
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class ReservationEntity extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long reservationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,13 +56,10 @@ public class ReservationEntity extends BaseTimeEntity {
     LocalTime endTime;
 
     @NotNull
-    private String purpose;
+    private Integer people;
 
     @NotNull
-    private Long people;
+    private String purpose;
 
     private String comment;
-
-
-
 }

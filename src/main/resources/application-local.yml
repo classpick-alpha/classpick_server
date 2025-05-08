@@ -1,0 +1,29 @@
+spring:
+  config:
+    import:
+      - classpath:application.yml
+  datasource:
+    url: jdbc:mysql://localhost:3306/${MYSQL_DATABASE:classpick_local}
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: create
+  sql:
+    init:
+      mode: always
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+
+app:
+  jwt:
+    key: ${JWT_KEY}
+  oauth:
+    callback:
+      success: ${FRONTEND_HOSTNAME}/auth/callback/success
+      failure: ${FRONTEND_HOSTNAME}/auth/callback/failure
