@@ -1,6 +1,9 @@
 package com.github.classpick.user.service;
 
-import com.github.classpick.user.controller.dto.UpdateUserInfoReq;
+import com.github.classpick.global.user.UserGetter;
+import com.github.classpick.user.controller.dto.request.UpdateUserRequest;
+import com.github.classpick.user.controller.dto.response.SafeUserResponse;
+import com.github.classpick.user.controller.dto.response.UserResponse;
 import com.github.classpick.user.exception.UserException;
 import com.github.classpick.user.exception.UserExceptionCode;
 import com.github.classpick.user.repository.UserEntity;
@@ -15,26 +18,33 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Long getUserInfo(Long userId) {
+    private final UserGetter userGetter;
+
+    public UserResponse getMe() {
+
+        return UserResponse.from(userGetter.getUser());
+    }
+
+    public SafeUserResponse getUserById(Long userId) {
+
         UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND.getMessage(),
-                        UserExceptionCode.USER_NOT_FOUND.getCode()));
-        return userEntity.getUserId();
+                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));
+
+        return SafeUserResponse.from(userEntity);
     }
 
     @Transactional
-    public Long updateUserInfo(Long userId, UpdateUserInfoReq request) {
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND.getMessage(),
-                        UserExceptionCode.USER_NOT_FOUND.getCode())
-                );
+    public UserResponse updateUserInfo(UpdateUserRequest request) {
 
-        userEntity.updateUserInfo(
-                request.getUserGroup(),
-                request.getSchoolNumber(),
-                request.getPhoneNumber()
-        );
+        UserEntity userEntity = userGetter.getUser();
 
-        return userEntity.getUserId();
+        userEntity.setName(request.getName());
+        userEntity.setUserGroup(request.getUserGroup());
+        userEntity.setSchoolNumber(request.getSchoolNumber());
+        userEntity.setPhoneNumber(request.getPhoneNumber());
+
+        userEntity = userRepository.save(userEntity);
+
+        return UserResponse.from(userEntity);
     }
 }

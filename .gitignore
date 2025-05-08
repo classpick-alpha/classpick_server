@@ -42,3 +42,7 @@ out/
 .DS_Store
 .AppleDouble
 .LSOverride
+
+### Configuration Level ###
+src/main/resources/application-*.yml
+!src/main/resources/application-local.yml
