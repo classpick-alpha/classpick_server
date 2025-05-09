@@ -1,8 +1,9 @@
 package com.github.classpick.reservation.service;
 
-import com.github.classpick.reservation.controller.dto.request.CancelReservationReq;
-import com.github.classpick.reservation.controller.dto.request.CreateReservationReq;
-import com.github.classpick.reservation.controller.dto.response.GetReservationListRes;
+import com.github.classpick.global.user.UserGetter;
+import com.github.classpick.reservation.controller.dto.request.CreateReservationRequest;
+import com.github.classpick.reservation.controller.dto.response.ReservationListResponse;
+import com.github.classpick.reservation.controller.dto.response.ReservationResponse;
 import com.github.classpick.reservation.exception.ReservationException;
 import com.github.classpick.reservation.exception.ReservationExceptionCode;
 import com.github.classpick.reservation.repository.ReservationEntity;
@@ -12,10 +13,7 @@ import com.github.classpick.room.exception.RoomException;
 import com.github.classpick.room.exception.RoomExceptionCode;
 import com.github.classpick.room.repository.RoomEntity;
 import com.github.classpick.room.repository.RoomRepository;
-import com.github.classpick.user.exception.UserException;
-import com.github.classpick.user.exception.UserExceptionCode;
 import com.github.classpick.user.repository.UserEntity;
-import com.github.classpick.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,65 +25,66 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final UserRepository userRepository;
     private final RoomRepository roomRepository;
+
     private final UserGetter userGetter;
 
-    // TODO: userId를 직접 받는 것은 보안 상 위험함으로,
-    //  추후 인증 구현 후 JWT 토큰에서 사용자 정보 추출하는 방식으로 수정
     @Transactional
-    public void createReservation(CreateReservationReq createReservationReq) {
-        Long userId = userGetter.getUserId();
-        UserEntity userEntity = userGetter.getUserEntity();
+    public ReservationResponse createReservation(long roomId, CreateReservationRequest dto) {
 
-        RoomEntity room = roomRepository.findById(createReservationReq.getRoomId())
-                .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND.getMessage(),
-                RoomExceptionCode.ROOM_NOT_FOUND.getCode()));
+        UserEntity user = userGetter.getUser();
 
-        boolean isDuplicated = reservationRepository.checkAvailableRoom(
-                createReservationReq.getRoomId(), createReservationReq.getDate(), createReservationReq.getStartTime(), createReservationReq.getEndTime());
-        if (isDuplicated) {
-            throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_EXIST.getMessage(),
-                    ReservationExceptionCode.RESERVATION_ALREADY_EXIST.getCode());
+        RoomEntity room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND));
+
+        if (reservationRepository.checkAvailableRoom(roomId, dto.getDate(), dto.getStartTime(), dto.getEndTime())) {
+
+            throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_EXIST);
         }
 
         ReservationEntity reservation = ReservationEntity.builder()
-                .user(userEntity)
+                .user(user)
                 .room(room)
-                .purpose(createReservationReq.getPurpose())
-                .people(createReservationReq.getPeople())
-                .startTime(createReservationReq.getStartTime())
-                .endTime(createReservationReq.getEndTime())
-                .comment(createReservationReq.getComment())
+                .purpose(dto.getPurpose())
+                .people(dto.getPeople())
+                .date(dto.getDate())
+                .startTime(dto.getStartTime())
+                .endTime(dto.getEndTime())
+                .comment(dto.getComment())
                 .status(Status.REQUESTED)
                 .build();
 
-        reservationRepository.save(reservation);
+        reservation = reservationRepository.save(reservation);
+
+        return ReservationResponse.from(reservation);
     }
 
     @Transactional
-    public void cancelReservation(CancelReservationReq cancelReservationReq) {
-        ReservationEntity reservation = reservationRepository.findById(cancelReservationReq.getReservationId())
-                .orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND.getMessage(),
-                        ReservationExceptionCode.RESERVATION_NOT_FOUND.getCode()));
+    public void cancelReservation(long reservationId) {
 
-        if(!reservation.getUser().getUserId().equals(cancelReservationReq.getUserId())) {
-            throw new ReservationException(ReservationExceptionCode.RESERVATION_NOT_MATCH.getMessage(),
-                    ReservationExceptionCode.RESERVATION_NOT_MATCH.getCode());
+        UserEntity user = userGetter.getUser();
+
+        ReservationEntity reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
+
+        if (!reservation.getUser().getUserId().equals(user.getUserId())) {
+
+            throw new ReservationException(ReservationExceptionCode.RESERVATION_NOT_MATCH);
         }
 
         reservationRepository.delete(reservation);
     }
 
     @Transactional(readOnly = true)
-    public List<GetReservationListRes> getReservationsList(Long userId){
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND.getMessage(),
-                        UserExceptionCode.USER_NOT_FOUND.getCode()));
+    public ReservationListResponse getReservationsList() {
 
-        return reservationRepository.findByUser_UserId(userId).stream()
-                .map(GetReservationListRes::fromEntity)
+        UserEntity user = userGetter.getUser();
+
+        List<ReservationResponse> reservations = reservationRepository.findByUser_UserId(user.getUserId())
+                .stream()
+                .map(ReservationResponse::from)
                 .toList();
-    }
 
+        return ReservationListResponse.of(reservations);
+    }
 }
