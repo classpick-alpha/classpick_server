@@ -19,6 +19,9 @@ public class UpdateUserRequest {
     @NotBlank
     String userGroup;
 
+    @NotBlank
+    String department;
+
     @Pattern(regexp = SCHOOL_NUMBER)
     String schoolNumber;
 
