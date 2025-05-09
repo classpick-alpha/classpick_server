@@ -67,6 +67,7 @@ public class DepartmentValidator implements ConstraintValidator<DepartmentValida
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+
         return VALID_DEPARTMENTS.contains(value);
     }
 }
