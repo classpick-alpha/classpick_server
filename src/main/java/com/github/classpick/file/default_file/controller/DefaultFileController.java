@@ -1,12 +1,13 @@
-package com.github.classpick.default_file.controller;
+package com.github.classpick.file.default_file.controller;
 
 
-import com.github.classpick.default_file.controller.dto.GetDefaultFileInfoRes;
-import com.github.classpick.default_file.controller.dto.SaveDefaultFileRes;
-import com.github.classpick.default_file.repository.DefaultFileEntity;
-import com.github.classpick.default_file.service.DefaultFileService;
+import com.github.classpick.file.default_file.controller.dto.GetDefaultFileInfoRes;
+import com.github.classpick.file.default_file.controller.dto.SaveDefaultFileRes;
+import com.github.classpick.file.default_file.repository.DefaultFileEntity;
+import com.github.classpick.file.default_file.service.DefaultFileService;
 import com.github.classpick.global.dto.Response;
 import io.swagger.v3.oas.annotations.Hidden;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Hidden
 @RequiredArgsConstructor

@@ -1,8 +1,7 @@
-package com.github.classpick.default_file.repository;
-
-import org.springframework.data.jpa.repository.JpaRepository;
+package com.github.classpick.file.default_file.repository;
 
 import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DefaultFileRepository extends JpaRepository<DefaultFileEntity, Long> {
 
