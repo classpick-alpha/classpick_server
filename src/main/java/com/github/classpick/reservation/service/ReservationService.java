@@ -1,11 +1,14 @@
 package com.github.classpick.reservation.service;
 
+import com.github.classpick.file.upload.dto.UploadImageResponse;
+import com.github.classpick.file.upload.service.UploadService;
 import com.github.classpick.global.user.UserGetter;
 import com.github.classpick.reservation.controller.dto.request.CreateReservationRequest;
 import com.github.classpick.reservation.controller.dto.response.ReservationListResponse;
 import com.github.classpick.reservation.controller.dto.response.ReservationResponse;
 import com.github.classpick.reservation.exception.ReservationException;
 import com.github.classpick.reservation.exception.ReservationExceptionCode;
+import com.github.classpick.reservation.repository.ProofType;
 import com.github.classpick.reservation.repository.ReservationEntity;
 import com.github.classpick.reservation.repository.ReservationRepository;
 import com.github.classpick.reservation.repository.Status;
@@ -14,11 +17,10 @@ import com.github.classpick.room.exception.RoomExceptionCode;
 import com.github.classpick.room.repository.RoomEntity;
 import com.github.classpick.room.repository.RoomRepository;
 import com.github.classpick.user.repository.UserEntity;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class ReservationService {
     private final RoomRepository roomRepository;
 
     private final UserGetter userGetter;
+    private final UploadService uploadService;
 
     @Transactional
     public ReservationResponse createReservation(long roomId, CreateReservationRequest dto) {
@@ -86,5 +89,9 @@ public class ReservationService {
                 .toList();
 
         return ReservationListResponse.of(reservations);
+    }
+
+    public UploadImageResponse generateProofUploadUrl(Long reservationId, ProofType type) {
+        return uploadService.uploadImage("reservations", reservationId, "proofs/" + type.toPathname());
     }
 }
