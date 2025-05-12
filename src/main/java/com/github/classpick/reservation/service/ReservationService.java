@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,14 +36,6 @@ public class ReservationService {
 
         RoomEntity room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RoomException(RoomExceptionCode.ROOM_NOT_FOUND));
-
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime reservationTime = LocalDateTime.of(dto.getDate() ,dto.getStartTime());
-
-        if (reservationTime.isBefore(now)){
-
-            throw new ReservationException(ReservationExceptionCode.RESERVATION_IN_PAST);
-        }
 
         if (reservationRepository.checkAvailableRoom(roomId, dto.getDate(), dto.getStartTime(), dto.getEndTime())) {
 
