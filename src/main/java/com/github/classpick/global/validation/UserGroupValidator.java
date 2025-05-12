@@ -5,9 +5,9 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.List;
 
-public class DepartmentValidator implements ConstraintValidator<DepartmentValidate, String> {
+public class UserGroupValidator implements ConstraintValidator<UserGroupValidate, String> {
 
-    private static final List<String> VALID_DEPARTMENTS = List.of(
+    private static final List<String> VALID_USERGROUP = List.of(
             "글로벌인문·지역대학 한국어문학부",
             "글로벌인문·지역대학 영어영문학부",
             "글로벌인문·지역대학 중국학부",
@@ -68,6 +68,6 @@ public class DepartmentValidator implements ConstraintValidator<DepartmentValida
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
-        return VALID_DEPARTMENTS.contains(value);
+        return VALID_USERGROUP.contains(value);
     }
 }

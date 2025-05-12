@@ -8,8 +8,8 @@ import java.lang.annotation.*;
 @Documented
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = DepartmentValidator.class)
-public @interface DepartmentValidate {
+@Constraint(validatedBy = UserGroupValidator.class)
+public @interface UserGroupValidate {
 
     String[] messages() default "올바른 학과가 아닙니다.";
 

@@ -1,6 +1,6 @@
 package com.github.classpick.user.controller.dto.request;
 
-import com.github.classpick.global.validation.DepartmentValidate;
+import com.github.classpick.global.validation.UserGroupValidate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -18,11 +18,8 @@ public class UpdateUserRequest {
     String name;
 
     @NotBlank
+    @UserGroupValidate
     String userGroup;
-
-    @NotBlank
-    @DepartmentValidate
-    String department;
 
     @Pattern(regexp = SCHOOL_NUMBER)
     String schoolNumber;
