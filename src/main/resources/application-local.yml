@@ -27,3 +27,11 @@ app:
     callback:
       success: ${FRONTEND_HOSTNAME}/auth/callback/success
       failure: ${FRONTEND_HOSTNAME}/auth/callback/failure
+  cloud:
+    aws:
+      region: ap-northeast-2
+      s3:
+        bucket: ${AWS_S3_BUCKET}
+      credential:
+        accessKey: ${AWS_ACCESS_KEY}
+        secretKey: ${AWS_SECRET_KEY}
