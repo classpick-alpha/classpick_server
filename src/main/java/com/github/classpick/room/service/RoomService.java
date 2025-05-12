@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final ReservationRepository reservationRepository;
 
+    @Transactional(readOnly = true)
     public RoomListResponse getRoomList(RoomFilterRequest dto) {
 
         List<RoomResponse> rooms = roomRepository.findAllWithFilter(
@@ -41,6 +43,7 @@ public class RoomService {
         return RoomListResponse.of(rooms);
     }
 
+    @Transactional(readOnly = true)
     public RoomTimeTableResponse getRoomTimeTable(Long roomId, LocalDate baseDate) {
 
         RoomEntity room = roomRepository.findById(roomId)
