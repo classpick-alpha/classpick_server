@@ -18,7 +18,7 @@ public class AwsProperty {
     private S3 s3;
 
     @NestedConfigurationProperty
-    private Credentials credentials;
+    private Credential credential;
 
     @Data
     public static class S3 {
@@ -28,7 +28,7 @@ public class AwsProperty {
     }
 
     @Data
-    public static class Credentials {
+    public static class Credential {
 
         @NotBlank
         private String accessKey;

@@ -19,7 +19,7 @@ public class S3Config {
 
     @Bean
     public AWSCredentialsProvider awsCredentialsProvider() {
-        AWSCredentials awsCredentials = new BasicAWSCredentials(awsProperty.getCredentials().getAccessKey(), awsProperty.getCredentials().getSecretKey());
+        AWSCredentials awsCredentials = new BasicAWSCredentials(awsProperty.getCredential().getAccessKey(), awsProperty.getCredential().getSecretKey());
         return new AWSStaticCredentialsProvider(awsCredentials);
     }
 
