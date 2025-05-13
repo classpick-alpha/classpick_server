@@ -1,9 +1,9 @@
 package com.github.classpick.file.upload.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
 
-@Builder
+@Getter
 @AllArgsConstructor(staticName = "of")
 public class UploadImageResponse {
 

@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 
 @Getter
 @Setter
@@ -28,23 +30,36 @@ public class UserEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-
     @Nullable
     private String name;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
-
     @Nullable
     private String userGroup;
-
     @Nullable
     private String schoolNumber;
-
     @NotNull
     private String email;
-
     @Nullable
     private String phoneNumber;
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(userId, that.userId);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hashCode(userId);
+    }
 }
