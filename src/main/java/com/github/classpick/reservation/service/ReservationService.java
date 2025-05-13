@@ -17,10 +17,11 @@ import com.github.classpick.room.exception.RoomExceptionCode;
 import com.github.classpick.room.repository.RoomEntity;
 import com.github.classpick.room.repository.RoomRepository;
 import com.github.classpick.user.repository.UserEntity;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,9 +46,17 @@ public class ReservationService {
             throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_EXIST);
         }
 
-        ReservationEntity reservation = ReservationEntity.builder().user(user).room(room).purpose(dto.getPurpose())
-                .people(dto.getPeople()).date(dto.getDate()).startTime(dto.getStartTime()).endTime(dto.getEndTime())
-                .comment(dto.getComment()).status(Status.REQUESTED).build();
+        ReservationEntity reservation = ReservationEntity.builder()
+                .user(user)
+                .room(room)
+                .purpose(dto.getPurpose())
+                .people(dto.getPeople())
+                .date(dto.getDate())
+                .startTime(dto.getStartTime())
+                .endTime(dto.getEndTime())
+                .comment(dto.getComment())
+                .status(Status.REQUESTED)
+                .build();
 
         reservation = reservationRepository.save(reservation);
 
@@ -75,32 +84,32 @@ public class ReservationService {
 
         UserEntity user = userGetter.getUser();
 
-        List<ReservationResponse> reservations = reservationRepository.findByUser_UserId(user.getUserId()).stream()
-                .map(ReservationResponse::from).toList();
+        List<ReservationResponse> reservations = reservationRepository.findByUser_UserId(user.getUserId())
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
 
         return ReservationListResponse.of(reservations);
     }
 
     public UploadImageResponse generateOcrImage(Long reservationId) {
-        reservationRepository.findById(reservationId).stream()
-                .peek((reservation) -> {
-                    if (!reservation.getUser().equals(userGetter.getUser())) {
-                        throw new ReservationException(ReservationExceptionCode.RESERVATION_USER_NOT_MATCH);
-                    }
-                }).findFirst()
-                .orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
+
+        reservationRepository.findById(reservationId).stream().peek((reservation) -> {
+            if (!reservation.getUser().equals(userGetter.getUser())) {
+                throw new ReservationException(ReservationExceptionCode.RESERVATION_USER_NOT_MATCH);
+            }
+        }).findFirst().orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
 
         return UploadImageResponse.of(s3Service.generatePresignedUrl(S3KeyFactory.reservatioOcrKey(reservationId)));
     }
 
     public UploadImageResponse generateCleanUpImage(Long reservationId) {
-        reservationRepository.findById(reservationId).stream()
-                .peek((reservation) -> {
-                    if (!reservation.getUser().equals(userGetter.getUser())) {
-                        throw new ReservationException(ReservationExceptionCode.RESERVATION_USER_NOT_MATCH);
-                    }
-                }).findFirst()
-                .orElseThrow(()-> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
+
+        reservationRepository.findById(reservationId).stream().peek((reservation) -> {
+            if (!reservation.getUser().equals(userGetter.getUser())) {
+                throw new ReservationException(ReservationExceptionCode.RESERVATION_USER_NOT_MATCH);
+            }
+        }).findFirst().orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
         return UploadImageResponse.of(s3Service.generatePresignedUrl(S3KeyFactory.reservatioCleanUpKey(reservationId)));
     }
 }

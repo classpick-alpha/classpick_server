@@ -6,13 +6,11 @@ import com.github.classpick.global.dto.Response;
 import com.github.classpick.reservation.controller.dto.request.CreateReservationRequest;
 import com.github.classpick.reservation.controller.dto.response.ReservationListResponse;
 import com.github.classpick.reservation.controller.dto.response.ReservationResponse;
-import com.github.classpick.reservation.repository.ProofType;
 import com.github.classpick.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +27,8 @@ public class ReservationController {
 
     @Operation(summary = "예약 생성")
     @PostMapping("/v0.0/reservations/{roomId}")
-    public Response<ReservationResponse> createReservation(
-            @PathVariable Long roomId,
-            @Valid @RequestBody Request<CreateReservationRequest> body
-    ) {
+    public Response<ReservationResponse> createReservation(@PathVariable Long roomId,
+                                                           @Valid @RequestBody Request<CreateReservationRequest> body) {
 
         return Response.ok(reservationService.createReservation(roomId, body.getData()));
     }
@@ -53,13 +49,15 @@ public class ReservationController {
         return Response.ok(reservationService.getReservationsList());
     }
 
-    @Operation(summary = "노쇼 방지 / 청결 인증 이미지 Presigned URL 발급")
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/v0.0/reservations/{reservationId}/proofs/{type}/url")
-    public Response<UploadImageResponse> generateReservationProofUploadUrl(
-            @PathVariable Long reservationId,
-            @PathVariable ProofType type
-    ) {
-        return Response.ok(reservationService.generateProofUploadUrl(reservationId, type));
-}
+    @Operation(summary = "노쇼 방지 인증 이미지 Presigned URL 발급")
+    @PostMapping("/v0.0/reservations/{reservationId}/ocr/url")
+    public Response<UploadImageResponse> generateOcrImage(@PathVariable Long reservationId) {
+        return Response.ok(reservationService.generateOcrImage(reservationId));
+    }
+
+    @Operation(summary = "청결 인증 이미지 Presigned URL 발급")
+    @PostMapping("/v0.0/reservations/{reservationId}/clean-up/url")
+    public Response<UploadImageResponse> generateCleanUpImage(@PathVariable Long reservationId) {
+        return Response.ok(reservationService.generateCleanUpImage(reservationId));
+    }
 }
