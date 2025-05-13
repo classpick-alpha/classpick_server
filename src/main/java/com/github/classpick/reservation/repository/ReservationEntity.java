@@ -21,6 +21,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -30,36 +31,46 @@ import java.time.LocalTime;
 @Entity
 public class ReservationEntity extends BaseTimeEntity {
 
+    @NotNull
+    LocalDate date;
+    @NotNull
+    LocalTime startTime;
+    @NotNull
+    LocalTime endTime;
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long reservationId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private RoomEntity room;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    @NotNull
-    LocalDate date;
-
-    @NotNull
-    LocalTime startTime;
-
-    @NotNull
-    LocalTime endTime;
-
     @NotNull
     private Integer people;
-
     @NotNull
     private String purpose;
-
     private String comment;
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ReservationEntity that = (ReservationEntity) o;
+        return Objects.equals(reservationId, that.reservationId);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hashCode(reservationId);
+    }
 }

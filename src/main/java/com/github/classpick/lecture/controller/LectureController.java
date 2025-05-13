@@ -1,5 +1,6 @@
 package com.github.classpick.lecture.controller;
 
+import com.github.classpick.global.dto.Response;
 import com.github.classpick.lecture.controller.dto.response.LectureListResponse;
 import com.github.classpick.lecture.service.LectureService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,8 +19,8 @@ public class LectureController {
 
     @Operation(summary = "강의실 수업 정보 가져오기")
     @GetMapping("/v0.0/lectures/{id}")
-    public LectureListResponse lecture(@PathVariable long id) {
+    public Response<LectureListResponse> lecture(@PathVariable long id) {
 
-        return lectureService.getLectures(id);
+        return Response.ok(lectureService.getLectures(id));
     }
 }
