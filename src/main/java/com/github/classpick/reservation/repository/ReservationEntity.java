@@ -21,6 +21,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -50,9 +51,26 @@ public class ReservationEntity extends BaseTimeEntity {
     private Status status;
     @NotNull
     private Integer people;
-
     @NotNull
     private String purpose;
-
     private String comment;
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ReservationEntity that = (ReservationEntity) o;
+        return Objects.equals(reservationId, that.reservationId);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hashCode(reservationId);
+    }
 }
