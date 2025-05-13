@@ -1,19 +1,18 @@
-package com.github.classpick.default_file.service;
+package com.github.classpick.file.default_file.service;
 
-import com.github.classpick.default_file.exception.DefaultFileException;
-import com.github.classpick.default_file.exception.DefaultFileExceptionCode;
-import com.github.classpick.default_file.repository.DefaultFileEntity;
-import com.github.classpick.default_file.repository.DefaultFileRepository;
+import com.github.classpick.file.default_file.exception.DefaultFileException;
+import com.github.classpick.file.default_file.exception.DefaultFileExceptionCode;
+import com.github.classpick.file.default_file.repository.DefaultFileEntity;
+import com.github.classpick.file.default_file.repository.DefaultFileRepository;
 import com.github.classpick.user.exception.UserException;
 import com.github.classpick.user.exception.UserExceptionCode;
 import com.github.classpick.user.repository.UserEntity;
 import com.github.classpick.user.repository.UserRepository;
+import java.io.File;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

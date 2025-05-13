@@ -1,5 +1,6 @@
 package com.github.classpick.reservation.controller;
 
+import com.github.classpick.file.upload.dto.UploadImageResponse;
 import com.github.classpick.global.dto.Request;
 import com.github.classpick.global.dto.Response;
 import com.github.classpick.reservation.controller.dto.request.CreateReservationRequest;
@@ -26,10 +27,8 @@ public class ReservationController {
 
     @Operation(summary = "예약 생성")
     @PostMapping("/v0.0/reservations/{roomId}")
-    public Response<ReservationResponse> createReservation(
-            @PathVariable Long roomId,
-            @Valid @RequestBody Request<CreateReservationRequest> body
-    ) {
+    public Response<ReservationResponse> createReservation(@PathVariable Long roomId,
+                                                           @Valid @RequestBody Request<CreateReservationRequest> body) {
 
         return Response.ok(reservationService.createReservation(roomId, body.getData()));
     }
@@ -48,5 +47,17 @@ public class ReservationController {
     public Response<ReservationListResponse> getReservationsList() {
 
         return Response.ok(reservationService.getReservationsList());
+    }
+
+    @Operation(summary = "노쇼 방지 인증 이미지 Presigned URL 발급")
+    @PostMapping("/v0.0/reservations/{reservationId}/ocr/url")
+    public Response<UploadImageResponse> generateOcrImage(@PathVariable Long reservationId) {
+        return Response.ok(reservationService.generateOcrImage(reservationId));
+    }
+
+    @Operation(summary = "청결 인증 이미지 Presigned URL 발급")
+    @PostMapping("/v0.0/reservations/{reservationId}/clean-up/url")
+    public Response<UploadImageResponse> generateCleanUpImage(@PathVariable Long reservationId) {
+        return Response.ok(reservationService.generateCleanUpImage(reservationId));
     }
 }

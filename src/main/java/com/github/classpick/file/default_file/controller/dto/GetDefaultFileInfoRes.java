@@ -1,10 +1,9 @@
-package com.github.classpick.default_file.controller.dto;
+package com.github.classpick.file.default_file.controller.dto;
 
-import com.github.classpick.default_file.repository.DefaultFileEntity;
+import com.github.classpick.file.default_file.repository.DefaultFileEntity;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @Getter
 @RequiredArgsConstructor(staticName = "of")

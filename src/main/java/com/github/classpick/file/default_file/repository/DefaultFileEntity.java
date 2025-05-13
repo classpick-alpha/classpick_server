@@ -1,4 +1,4 @@
-package com.github.classpick.default_file.repository;
+package com.github.classpick.file.default_file.repository;
 
 import com.github.classpick.global.entity.BaseTimeEntity;
 import com.github.classpick.user.repository.UserEntity;

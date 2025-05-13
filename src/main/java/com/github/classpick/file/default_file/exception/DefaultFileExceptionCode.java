@@ -1,4 +1,4 @@
-package com.github.classpick.default_file.exception;
+package com.github.classpick.file.default_file.exception;
 
 import com.github.classpick.global.exception.CustomExceptionCode;
 import lombok.Getter;
