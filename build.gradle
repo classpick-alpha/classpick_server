@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.github.classpick'
-version = '0.1.0'
+version = '0.2.0'
 
 java {
     toolchain {
@@ -41,6 +41,8 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     implementation 'com.auth0:java-jwt:4.4.0'
+
+    implementation("io.awspring.cloud:spring-cloud-starter-aws:2.4.4")
 
     implementation 'net.sourceforge.tess4j:tess4j:5.15.0'
 }

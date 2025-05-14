@@ -9,6 +9,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -23,7 +24,7 @@ public class NoshowEntity {
     private ReservationEntity reservation;
 
     @Nullable
-    private boolean certification;
+    private Boolean noshow;
 
     @NotNull
     private String ocrImage;
