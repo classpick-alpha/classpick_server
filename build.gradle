@@ -41,4 +41,6 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     implementation 'com.auth0:java-jwt:4.4.0'
+
+    implementation 'net.sourceforge.tess4j:tess4j:5.15.0'
 }
