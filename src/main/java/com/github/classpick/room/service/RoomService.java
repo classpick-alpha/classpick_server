@@ -10,14 +10,14 @@ import com.github.classpick.room.exception.RoomException;
 import com.github.classpick.room.exception.RoomExceptionCode;
 import com.github.classpick.room.repository.RoomEntity;
 import com.github.classpick.room.repository.RoomRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +26,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final ReservationRepository reservationRepository;
 
+    @Transactional(readOnly = true)
     public RoomListResponse getRoomList(RoomFilterRequest dto) {
 
         List<RoomResponse> rooms = roomRepository.findAllWithFilter(
@@ -42,6 +43,7 @@ public class RoomService {
         return RoomListResponse.of(rooms);
     }
 
+    @Transactional(readOnly = true)
     public RoomTimeTableResponse getRoomTimeTable(Long roomId, LocalDate baseDate) {
 
         RoomEntity room = roomRepository.findById(roomId)
@@ -51,9 +53,10 @@ public class RoomService {
         LocalDate friday = baseDate.with(DayOfWeek.FRIDAY);
 
         Map<LocalDate, List<ReservationEntity>> reservationsByDate =
-                reservationRepository.findAllByRoom_RoomIdAndDateBetween(roomId,
-                monday,
-                friday
+                reservationRepository.findAllByRoom_RoomIdAndDateBetween(
+                    roomId,
+                    monday,
+                    friday
         ).stream().collect(Collectors.groupingBy(ReservationEntity::getDate));
 
         List<RoomTimeTableResponse.DailyReservation> dailyReservations = monday.datesUntil(friday.plusDays(1))
@@ -64,7 +67,11 @@ public class RoomService {
                                 .map(reservation -> RoomTimeTableResponse.TimeReservations.of(
                                         reservation.getStartTime(),
                                         reservation.getEndTime(),
-                                        reservation.getStatus()
+                                        reservation.getStatus(),
+                                        RoomTimeTableResponse.TimeReservations.User.of(
+                                                reservation.getUser().getUserId(),
+                                                reservation.getUser().getName()
+                                        )
                                 ))
                                 .toList()
                 ))

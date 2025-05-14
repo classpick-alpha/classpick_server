@@ -1,4 +1,4 @@
-package com.github.classpick.default_file.controller.dto;
+package com.github.classpick.file.default_file.controller.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

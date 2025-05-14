@@ -1,5 +1,8 @@
 package com.github.classpick.reservation.service;
 
+import com.github.classpick.file.upload.dto.UploadImageResponse;
+import com.github.classpick.file.upload.util.S3KeyFactory;
+import com.github.classpick.global.external.aws.s3.S3Service;
 import com.github.classpick.global.user.UserGetter;
 import com.github.classpick.reservation.controller.dto.request.CreateReservationRequest;
 import com.github.classpick.reservation.controller.dto.response.ReservationListResponse;
@@ -28,6 +31,7 @@ public class ReservationService {
     private final RoomRepository roomRepository;
 
     private final UserGetter userGetter;
+    private final S3Service s3Service;
 
     @Transactional
     public ReservationResponse createReservation(long roomId, CreateReservationRequest dto) {
@@ -86,5 +90,26 @@ public class ReservationService {
                 .toList();
 
         return ReservationListResponse.of(reservations);
+    }
+
+    public UploadImageResponse generateOcrImage(Long reservationId) {
+
+        reservationRepository.findById(reservationId).stream().peek((reservation) -> {
+            if (!reservation.getUser().equals(userGetter.getUser())) {
+                throw new ReservationException(ReservationExceptionCode.RESERVATION_USER_NOT_MATCH);
+            }
+        }).findFirst().orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
+
+        return UploadImageResponse.of(s3Service.generatePresignedUrl(S3KeyFactory.reservatioOcrKey(reservationId)));
+    }
+
+    public UploadImageResponse generateCleanUpImage(Long reservationId) {
+
+        reservationRepository.findById(reservationId).stream().peek((reservation) -> {
+            if (!reservation.getUser().equals(userGetter.getUser())) {
+                throw new ReservationException(ReservationExceptionCode.RESERVATION_USER_NOT_MATCH);
+            }
+        }).findFirst().orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
+        return UploadImageResponse.of(s3Service.generatePresignedUrl(S3KeyFactory.reservatioCleanUpKey(reservationId)));
     }
 }

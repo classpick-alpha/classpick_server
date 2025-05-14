@@ -14,7 +14,7 @@ public enum ReservationExceptionCode implements CustomExceptionCode {
     RESERVATION_NOT_FOUND("강의실 예약 정보가 없습니다.", 3003),
     RESERVATION_ALREADY_EXIST("강의실 예약이 이미 존재합니다.", 3004),
     RESERVATION_NOT_MATCH("강의실 예약 정보가 일치하지않습니다.", 3005),
-    RESERVATION_IN_PAST("강의실 예약을 과거 시간으로 예약할 수 없습니다.", 3006)
+    RESERVATION_USER_NOT_MATCH("강의실 예약 정보와 로그인 유저 정보가 일치하지 않습니다.", 3006)
     ;
 
     private final String message;
