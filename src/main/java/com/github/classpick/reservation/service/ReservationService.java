@@ -5,10 +5,13 @@ import com.github.classpick.file.upload.util.S3KeyFactory;
 import com.github.classpick.global.external.aws.s3.S3Service;
 import com.github.classpick.global.user.UserGetter;
 import com.github.classpick.reservation.controller.dto.request.CreateReservationRequest;
+import com.github.classpick.reservation.controller.dto.request.OcrRequest;
+import com.github.classpick.reservation.controller.dto.response.OcrResponse;
 import com.github.classpick.reservation.controller.dto.response.ReservationListResponse;
 import com.github.classpick.reservation.controller.dto.response.ReservationResponse;
 import com.github.classpick.reservation.exception.ReservationException;
 import com.github.classpick.reservation.exception.ReservationExceptionCode;
+import com.github.classpick.reservation.repository.NoshowEntity;
 import com.github.classpick.reservation.repository.ReservationEntity;
 import com.github.classpick.reservation.repository.ReservationRepository;
 import com.github.classpick.reservation.repository.Status;
@@ -17,7 +20,12 @@ import com.github.classpick.room.exception.RoomExceptionCode;
 import com.github.classpick.room.repository.RoomEntity;
 import com.github.classpick.room.repository.RoomRepository;
 import com.github.classpick.user.repository.UserEntity;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import kong.unirest.json.JSONObject;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +40,22 @@ public class ReservationService {
 
     private final UserGetter userGetter;
     private final S3Service s3Service;
+
+    @Value("${app.ocr.apikey}")
+    private String ocrApiKey;
+
+    @Transactional(readOnly = true)
+    public ReservationListResponse getReservationsList() {
+
+        UserEntity user = userGetter.getUser();
+
+        List<ReservationResponse> reservations = reservationRepository.findByUser_UserId(user.getUserId())
+                .stream()
+                .map(ReservationResponse::from)
+                .toList();
+
+        return ReservationListResponse.of(reservations);
+    }
 
     @Transactional
     public ReservationResponse createReservation(long roomId, CreateReservationRequest dto) {
@@ -79,19 +103,6 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
-    @Transactional(readOnly = true)
-    public ReservationListResponse getReservationsList() {
-
-        UserEntity user = userGetter.getUser();
-
-        List<ReservationResponse> reservations = reservationRepository.findByUser_UserId(user.getUserId())
-                .stream()
-                .map(ReservationResponse::from)
-                .toList();
-
-        return ReservationListResponse.of(reservations);
-    }
-
     public UploadImageResponse generateOcrImage(Long reservationId) {
 
         reservationRepository.findById(reservationId).stream().peek((reservation) -> {
@@ -101,6 +112,37 @@ public class ReservationService {
         }).findFirst().orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
 
         return UploadImageResponse.of(s3Service.generatePresignedUrl(S3KeyFactory.reservatioOcrKey(reservationId)));
+    }
+
+    @Transactional
+    public OcrResponse verifyOcr(long reservationId, OcrRequest request) {
+
+        ReservationEntity reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
+
+        String unitNumber = reservation.getRoom().getUnitNumber();
+
+        HttpResponse<JsonNode> response = Unirest.post("https://ocr.classpick.co.kr")
+                .header("Content-Type", "image/jpeg")
+                .header("X-CLASSPICK-VERIFICATION-KEY", ocrApiKey)
+                .body(Unirest.get(request.getImageUrl()).asBytes().getBody())
+                .asJson();
+
+        if (response.getBody().getObject().getInt("status") != 200) {
+            throw new ReservationException(
+                    response.getBody().getObject().getString("message"),
+                    ReservationExceptionCode.RESERVATION_OCR_VERIFY_FAILED.getStatus()
+            );
+        }
+
+        //noinspection unchecked
+        boolean result = ((List<JSONObject>) response.getBody().getObject().getJSONArray("data").toList()).stream()
+                .filter(json -> json.getDouble("score") >= 0.9)
+                .anyMatch(json -> json.getString("text").equals(unitNumber));
+
+        NoshowEntity.of(reservation, result, request.getImageUrl());
+
+        return OcrResponse.of(result);
     }
 
     public UploadImageResponse generateCleanUpImage(Long reservationId) {
