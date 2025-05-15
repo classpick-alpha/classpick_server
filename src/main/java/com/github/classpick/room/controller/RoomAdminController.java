@@ -22,8 +22,7 @@ public class RoomAdminController {
 
     @PostMapping("/v0.0/admin/rooms")
     public Response<RoomCreateResponse> createRoom(@RequestBody @Valid RoomCreateRequest request) {
-        RoomCreateResponse response = roomAdminService.createRoom(request);
-        return Response.ok(response);
-    }
 
+        return Response.ok(roomAdminService.createRoom(request));
+    }
 }

@@ -21,15 +21,18 @@ public class ReservationAdminController {
     @Operation(summary = "강의실 예약 승인")
     @PostMapping("/v0.0/admin/reservation/{reservationId}/approve")
     public Response<Void> approveReservation(@PathVariable Long reservationId) {
+
         reservationAdminService.approveReservation(reservationId);
+
         return Response.ok();
     }
 
     @Operation(summary = "강의실 예약 거절")
     @PostMapping("/v0.0/admin/reservation/{reservationId}/rejected")
     public Response<Void> rejectReservation(@PathVariable Long reservationId) {
+
         reservationAdminService.rejectReservation(reservationId);
+
         return Response.ok();
     }
-
 }

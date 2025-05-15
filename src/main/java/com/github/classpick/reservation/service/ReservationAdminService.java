@@ -12,37 +12,36 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ReservationAdminService {
+
     private final ReservationRepository reservationRepository;
 
     @Transactional
-    public void approveReservation(long reservationId){
+    public void approveReservation(long reservationId) {
+
         ReservationEntity reservation = getPendingReservations(reservationId);
 
         reservation.setStatus(Status.APPROVED);
-        reservationRepository.save(reservation);
     }
 
     @Transactional
     public void rejectReservation(long reservationId) {
+
         ReservationEntity reservation = getPendingReservations(reservationId);
 
         reservation.setStatus(Status.REJECTED);
-        reservationRepository.save(reservation);
     }
 
     @Transactional
     public ReservationEntity getPendingReservations(long reservationId) {
-        ReservationEntity reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
 
-        if (reservation.getStatus() == Status.APPROVED) {
-            throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_APPROVED);
-        }
-
-        if (reservation.getStatus() == Status.REJECTED) {
-            throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_REJECTED);
-        }
-
-        return reservation;
+        return reservationRepository.findById(reservationId).stream().peek(reservationEntity -> {
+            if (reservationEntity.getStatus() == Status.APPROVED) {
+                throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_APPROVED);
+            }
+        }).peek(reservationEntity -> {
+            if (reservationEntity.getStatus() == Status.REJECTED) {
+                throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_REJECTED);
+            }
+        }).findAny().orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
     }
 }

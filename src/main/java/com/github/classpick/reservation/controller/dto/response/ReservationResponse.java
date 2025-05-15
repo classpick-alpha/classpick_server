@@ -29,7 +29,14 @@ public class ReservationResponse {
 
     Status status;
 
+    boolean ocrVerified;
+
     public static ReservationResponse from(ReservationEntity reservation) {
+
+        return from(reservation, false);
+    }
+
+    public static ReservationResponse from(ReservationEntity reservation, boolean ocrVerified) {
 
         return of(
                 RoomResponse.from(reservation.getRoom()),
@@ -39,7 +46,8 @@ public class ReservationResponse {
                 reservation.getEndTime(),
                 reservation.getPeople(),
                 reservation.getPurpose(),
-                reservation.getStatus()
+                reservation.getStatus(),
+                ocrVerified
         );
     }
 }

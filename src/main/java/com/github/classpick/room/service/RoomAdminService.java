@@ -14,6 +14,7 @@ public class RoomAdminService {
     private final RoomRepository roomRepository;
 
     public RoomCreateResponse createRoom(RoomCreateRequest request) {
+
         RoomEntity room = RoomEntity.builder()
                 .placeName(request.getPlaceName())
                 .unitNumber(request.getUnitNumber())
@@ -22,7 +23,8 @@ public class RoomAdminService {
                 .image(request.getImage())
                 .build();
 
-        RoomEntity saved = roomRepository.save(room);
-        return RoomCreateResponse.from(saved);
+        room = roomRepository.save(room);
+
+        return RoomCreateResponse.from(room);
     }
 }
