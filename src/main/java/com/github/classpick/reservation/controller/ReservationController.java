@@ -3,9 +3,9 @@ package com.github.classpick.reservation.controller;
 import com.github.classpick.file.upload.dto.UploadImageResponse;
 import com.github.classpick.global.dto.Request;
 import com.github.classpick.global.dto.Response;
+import com.github.classpick.reservation.controller.dto.request.CreateReservationRequest;
 import com.github.classpick.reservation.controller.dto.request.OcrRequest;
 import com.github.classpick.reservation.controller.dto.response.OcrResponse;
-import com.github.classpick.reservation.controller.dto.request.CreateReservationRequest;
 import com.github.classpick.reservation.controller.dto.response.ReservationListResponse;
 import com.github.classpick.reservation.controller.dto.response.ReservationResponse;
 import com.github.classpick.reservation.service.ReservationService;
@@ -62,9 +62,9 @@ public class ReservationController {
 
     @Operation(summary = "노쇼 검증")
     @PostMapping("/v0.0/reservations/{reservationId}/ocr/verify")
-    public Response<OcrResponse> verifyOcr(@PathVariable Long reservationId, @RequestBody OcrRequest request) {
+    public Response<OcrResponse> verifyOcr(@PathVariable Long reservationId, @RequestBody @Valid Request<OcrRequest> request) {
 
-        return Response.ok(reservationService.verifyOcr(reservationId, request));
+        return Response.ok(reservationService.verifyOcr(reservationId, request.getData()));
     }
 
     @Operation(summary = "청결 인증 이미지 Presigned URL 발급")
