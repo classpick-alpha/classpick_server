@@ -10,24 +10,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "관리자")
-@RequiredArgsConstructor
+@Tag(name = "[관리자] 예약")
+@PreAuthorize("hasRole('MANAGER')")
 @RestController
+@RequiredArgsConstructor
 public class ReservationAdminController {
 
     private final ReservationAdminService reservationAdminService;
 
     @Operation(summary = "강의실 예약 승인")
-    @PreAuthorize("hasRole('MANAGER')")
-    @PostMapping("v0.0/admin/reservation/{reservationId}/approve")
+    @PostMapping("/v0.0/admin/reservation/{reservationId}/approve")
     public Response<Void> approveReservation(@PathVariable Long reservationId) {
         reservationAdminService.approveReservation(reservationId);
         return Response.ok();
     }
 
     @Operation(summary = "강의실 예약 거절")
-    @PreAuthorize("hasRole('MANAGER')")
-    @PostMapping("v0.0/admin/reservation/{reservationId}/rejected")
+    @PostMapping("/v0.0/admin/reservation/{reservationId}/rejected")
     public Response<Void> rejectReservation(@PathVariable Long reservationId) {
         reservationAdminService.rejectReservation(reservationId);
         return Response.ok();
