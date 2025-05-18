@@ -8,10 +8,10 @@ spring:
     password: ${MYSQL_PASSWORD:root}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   sql:
     init:
-      mode: never
+      mode: always
   security:
     oauth2:
       client:
