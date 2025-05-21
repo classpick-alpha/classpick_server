@@ -14,7 +14,14 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import com.github.classpick.user.exception.UserException;
+import com.github.classpick.user.exception.UserExceptionCode;
+import com.github.classpick.user.repository.GroupRepository;
+import com.github.classpick.user.repository.UserEntity;
+import com.github.classpick.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +32,17 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final ReservationRepository reservationRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public RoomListResponse getRoomList(RoomFilterRequest dto) {
+    public RoomListResponse getRoomList(RoomFilterRequest dto, Long userId) {
+
+        UserEntity savedUserEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserExceptionCode.USER_NOT_FOUND));
+        Long groupId = savedUserEntity.getGroup().getGroupId();
 
         List<RoomResponse> rooms = roomRepository.findAllWithFilter(
+                groupId,
                         dto.getPlaceName(),
                         dto.getCapacity(),
                         dto.getDate(),
