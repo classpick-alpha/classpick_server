@@ -1,19 +1,22 @@
 package com.github.classpick.reservation.service;
 
+import com.github.classpick.reservation.controller.dto.response.NoshowListResponse;
+import com.github.classpick.reservation.controller.dto.response.NoshowResponse;
 import com.github.classpick.reservation.exception.ReservationException;
 import com.github.classpick.reservation.exception.ReservationExceptionCode;
-import com.github.classpick.reservation.repository.ReservationEntity;
-import com.github.classpick.reservation.repository.ReservationRepository;
-import com.github.classpick.reservation.repository.Status;
+import com.github.classpick.reservation.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ReservationAdminService {
 
     private final ReservationRepository reservationRepository;
+    private final NoshowRepository noshowRepository;
 
     @Transactional
     public void approveReservation(long reservationId) {
@@ -43,5 +46,22 @@ public class ReservationAdminService {
                 throw new ReservationException(ReservationExceptionCode.RESERVATION_ALREADY_REJECTED);
             }
         }).findAny().orElseThrow(() -> new ReservationException(ReservationExceptionCode.RESERVATION_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public NoshowListResponse getNoshowList() {
+
+        List<NoshowEntity> noshowEntities = noshowRepository.findAll();
+
+        if (noshowEntities.isEmpty()) {
+            throw new ReservationException(ReservationExceptionCode.NOSHOW_NOT_FOUND);
+        }
+
+        List<NoshowResponse> responses = noshowEntities
+                .stream()
+                .map(NoshowResponse::from)
+                .toList();
+
+        return NoshowListResponse.of(responses);
     }
 }
