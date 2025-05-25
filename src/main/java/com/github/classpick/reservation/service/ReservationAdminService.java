@@ -51,17 +51,11 @@ public class ReservationAdminService {
     @Transactional(readOnly = true)
     public NoshowListResponse getNoshowList() {
 
-        List<NoshowEntity> noshowEntities = noshowRepository.findAll();
-
-        if (noshowEntities.isEmpty()) {
-            throw new ReservationException(ReservationExceptionCode.NOSHOW_NOT_FOUND);
-        }
-
-        List<NoshowResponse> responses = noshowEntities
+        List<NoshowResponse> noshowResponses = noshowRepository.findAll()
                 .stream()
                 .map(NoshowResponse::from)
                 .toList();
 
-        return NoshowListResponse.of(responses);
+        return NoshowListResponse.of(noshowResponses);
     }
 }
