@@ -1,11 +1,13 @@
 package com.github.classpick.reservation.controller;
 
 import com.github.classpick.global.dto.Response;
+import com.github.classpick.reservation.controller.dto.response.NoshowListResponse;
 import com.github.classpick.reservation.service.ReservationAdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,5 +36,11 @@ public class ReservationAdminController {
         reservationAdminService.rejectReservation(reservationId);
 
         return Response.ok();
+    }
+
+    @Operation(summary = "노쇼 데이터 목록 조회")
+    @GetMapping("/v0.0/admin/reservation/noshows")
+    public Response<NoshowListResponse> getNoshowsList() {
+        return Response.ok(reservationAdminService.getNoshowList());
     }
 }
