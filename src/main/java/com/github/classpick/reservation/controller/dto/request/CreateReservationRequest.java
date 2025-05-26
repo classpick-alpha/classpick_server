@@ -1,6 +1,7 @@
 package com.github.classpick.reservation.controller.dto.request;
 
 import com.github.classpick.global.validation.FutureDateValidate;
+import com.github.classpick.global.validation.ReservationTimeValidate;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.time.LocalTime;
 @Getter
 @AllArgsConstructor(staticName = "of")
 @FutureDateValidate
+@ReservationTimeValidate
 public class CreateReservationRequest {
 
     @NotNull
