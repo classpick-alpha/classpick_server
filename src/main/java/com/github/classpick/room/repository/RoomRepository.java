@@ -14,7 +14,7 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
     @Query("""
             select r
             from RoomEntity r
-            where r.placeName = coalesce(:placeName, r.placeName)
+            where r.group.groupId = :groupId and r.placeName = coalesce(:placeName, r.placeName)
               and (
                   :capacity is null
                   or (r.capacity is not null and r.capacity >= :capacity)
@@ -35,6 +35,7 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
               )
             """)
     List<RoomEntity> findAllWithFilter(
+            Long groupId,
             String placeName,
             Integer capacity,
             LocalDate date,

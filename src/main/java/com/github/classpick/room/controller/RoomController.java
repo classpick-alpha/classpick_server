@@ -1,6 +1,7 @@
 package com.github.classpick.room.controller;
 
 import com.github.classpick.global.dto.Response;
+import com.github.classpick.global.user.UserGetter;
 import com.github.classpick.room.controller.dto.request.RoomFilterRequest;
 import com.github.classpick.room.controller.dto.response.RoomListResponse;
 import com.github.classpick.room.controller.dto.response.RoomTimeTableResponse;
@@ -23,14 +24,15 @@ import java.time.LocalDate;
 public class RoomController {
 
     private final RoomService roomService;
+    private final UserGetter userGetter;
 
     @Operation(summary = "강의실 목록 조회")
     @GetMapping("/v0.0/rooms")
     public Response<RoomListResponse> getRooms(
             @ModelAttribute @Valid RoomFilterRequest request
     ) {
-
-        return Response.ok(roomService.getRoomList(request));
+        Long userId = userGetter.getUser().getUserId();
+        return Response.ok(roomService.getRoomList(request, userId));
     }
 
     @Operation(summary = "강의실 타임테이블 조회")
