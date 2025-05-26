@@ -46,4 +46,7 @@ dependencies {
 
     implementation("org.apache.poi:poi:5.4.1")
     implementation("org.apache.poi:poi-ooxml:5.4.1")
+    implementation 'net.sourceforge.tess4j:tess4j:5.15.0'
+
+    implementation 'com.konghq:unirest-java:3.14.5'
 }

@@ -8,4 +8,9 @@ public class ReservationException extends CustomException {
 
         super(code);
     }
+
+    public ReservationException(String message, int status) {
+
+        super(message, status);
+    }
 }

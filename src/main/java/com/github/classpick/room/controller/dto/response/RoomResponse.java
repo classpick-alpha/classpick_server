@@ -9,13 +9,21 @@ import lombok.Getter;
 public class RoomResponse {
 
     long roomId;
-    String image;
     String placeName;
     String unitNumber;
+    String alias;
+    String image;
     Integer capacity;
 
     public static RoomResponse from(RoomEntity room) {
 
-        return of(room.getRoomId(), room.getImage(), room.getPlaceName(), room.getUnitNumber(), room.getCapacity());
+        return of(
+                room.getRoomId(),
+                room.getPlaceName(),
+                room.getUnitNumber(),
+                room.getAlias(),
+                room.getImage(),
+                room.getCapacity()
+        );
     }
 }

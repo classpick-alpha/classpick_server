@@ -33,24 +33,32 @@ public class ReservationEntity extends BaseTimeEntity {
 
     @NotNull
     LocalDate date;
+
     @NotNull
     LocalTime startTime;
+
     @NotNull
     LocalTime endTime;
+
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long reservationId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private RoomEntity room;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @NotNull
     private Integer people;
+
     @NotNull
     private String purpose;
     private String comment;

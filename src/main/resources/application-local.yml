@@ -21,6 +21,8 @@ spring:
             client-secret: ${GOOGLE_CLIENT_SECRET}
 
 app:
+  ocr:
+    apikey: ${OCR_API_KEY}
   jwt:
     key: ${JWT_KEY}
   oauth:
