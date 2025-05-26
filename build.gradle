@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.github.classpick'
-version = '0.2.0'
+version = '0.4.0'
 
 java {
     toolchain {
@@ -43,4 +43,7 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.4.0'
 
     implementation("io.awspring.cloud:spring-cloud-starter-aws:2.4.4")
+
+    implementation("org.apache.poi:poi:5.4.1")
+    implementation("org.apache.poi:poi-ooxml:5.4.1")
 }

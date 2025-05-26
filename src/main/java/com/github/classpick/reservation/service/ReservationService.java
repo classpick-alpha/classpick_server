@@ -92,6 +92,7 @@ public class ReservationService {
         return ReservationListResponse.of(reservations);
     }
 
+    @Transactional
     public UploadImageResponse generateOcrImage(Long reservationId) {
 
         reservationRepository.findById(reservationId).stream().peek((reservation) -> {
@@ -103,6 +104,7 @@ public class ReservationService {
         return UploadImageResponse.of(s3Service.generatePresignedUrl(S3KeyFactory.reservatioOcrKey(reservationId)));
     }
 
+    @Transactional
     public UploadImageResponse generateCleanUpImage(Long reservationId) {
 
         reservationRepository.findById(reservationId).stream().peek((reservation) -> {
