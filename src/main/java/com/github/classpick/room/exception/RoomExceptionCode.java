@@ -15,6 +15,8 @@ public enum RoomExceptionCode implements CustomExceptionCode {
     ROOM_EXCEL_EMPTY_FILE("업로드된 파일이 비어 있습니다.", 2004),
     ROOM_EXCEL_UNSUPPORTED_FORMAT("엑셀(.xlsx) 파일만 업로드할 수 있습니다.", 2005),
     ROOM_EXCEL_IO_ERROR("엑셀 파일을 읽는 중 에러가 발생했습니다.", 2006),
+    ROOM_EXCEL_INVALID_TYPE("", 2007),
+
     ;
 
     private final String message;
