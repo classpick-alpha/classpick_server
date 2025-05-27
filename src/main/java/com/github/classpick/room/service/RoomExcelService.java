@@ -4,7 +4,7 @@ import com.github.classpick.room.exception.RoomException;
 import com.github.classpick.room.exception.RoomExceptionCode;
 import com.github.classpick.room.repository.RoomEntity;
 import com.github.classpick.room.repository.RoomRepository;
-import com.github.classpick.room.util.RoomExcelParser;
+import com.github.classpick.room.util.RoomExcelParserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class RoomExcelService {
         validateFileFormat(file);
 
         try (InputStream is = file.getInputStream()) {
-            List<RoomEntity> rooms = RoomExcelParser.parse(is);
+            List<RoomEntity> rooms = RoomExcelParserUtil.parse(is);
             roomRepository.saveAll(rooms);
         } catch (IOException e) {
             throw new RoomException(RoomExceptionCode.ROOM_EXCEL_IO_ERROR);
@@ -39,7 +39,7 @@ public class RoomExcelService {
 
     public void validateFileFormat(MultipartFile file) {
 
-        if (file == null || file.isEmpty()) {
+        if (file.isEmpty()) {
             throw new RoomException(RoomExceptionCode.ROOM_EXCEL_EMPTY_FILE);
         }
         String contentType = file.getContentType();
