@@ -110,6 +110,7 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
+    @Transactional
     public UploadImageResponse generateOcrImage(Long reservationId) {
 
         reservationRepository.findById(reservationId).stream().peek((reservation) -> {
