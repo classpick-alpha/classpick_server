@@ -19,8 +19,8 @@ public class RoomExcelController {
     private final RoomExcelService roomExcelService;
 
     @Operation(summary = "엑셀 업로드를 통한 강의실 생성")
-    @PostMapping(value = "/v0.0/rooms/excel/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Response<Void> uploadRomExcel(@RequestParam MultipartFile file) {
+    @PostMapping(value = "/v0.0/rooms/excel/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Response<Void> uploadRoomExcel(@RequestParam MultipartFile file) {
 
         roomExcelService.uploadRoomExcel(file);
         return Response.ok();
