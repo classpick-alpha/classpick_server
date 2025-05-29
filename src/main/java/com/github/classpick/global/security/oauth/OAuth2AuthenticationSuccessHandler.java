@@ -37,15 +37,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OAuth2GoogleUser oauth2User = (OAuth2GoogleUser) authentication.getPrincipal();
         String email = oauth2User.getEmail();
 
-        if (!email.matches(KOOKMIN_EMAIL_REGEX)) {
-            getRedirectStrategy().sendRedirect(
-                    request,
-                    response,
-                    String.format("%s?error=NOT_KOOKMIN_EMAIL", oauthProperty.getFailure())
-            );
-
-            return;
-        }
+//        if (!email.matches(KOOKMIN_EMAIL_REGEX)) {
+//            getRedirectStrategy().sendRedirect(
+//                    request,
+//                    response,
+//                    String.format("%s?error=NOT_KOOKMIN_EMAIL", oauthProperty.getFailure())
+//            );
+//
+//            return;
+//        }
 
         UserEntity user = userRepository.findByEmail(email)
                 .orElseGet(
