@@ -21,6 +21,7 @@ public class RoomExcelService {
     private static final String XLSX_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
     private final RoomRepository roomRepository;
+    private final RoomExcelParserUtil roomExcelParserUtil;
 
     @Transactional
     public void uploadRoomExcel(MultipartFile file) {
@@ -28,7 +29,7 @@ public class RoomExcelService {
         validateFileFormat(file);
 
         try (InputStream is = file.getInputStream()) {
-            List<RoomEntity> rooms = RoomExcelParserUtil.parse(is);
+            List<RoomEntity> rooms = roomExcelParserUtil.parse(is);
             roomRepository.saveAll(rooms);
         } catch (IOException e) {
             throw new RoomException(RoomExceptionCode.ROOM_EXCEL_IO_ERROR);
