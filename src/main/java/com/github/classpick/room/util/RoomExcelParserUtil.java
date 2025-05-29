@@ -80,7 +80,6 @@ public class RoomExcelParserUtil {
     }
 
     private Optional<String> getCellValue(Cell cell) {
-
         if (cell == null || cell.getCellType() == CellType.BLANK) {
             return Optional.empty();
         }
@@ -101,7 +100,6 @@ public class RoomExcelParserUtil {
             default -> Optional.empty();
         };
     }
-
 
     private Optional<Integer> getCellValueAsInt(Cell cell) {
 
