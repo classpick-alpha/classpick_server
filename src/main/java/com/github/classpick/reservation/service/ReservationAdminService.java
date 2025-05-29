@@ -1,7 +1,6 @@
 package com.github.classpick.reservation.service;
 
-import com.github.classpick.reservation.controller.dto.response.NoshowListResponse;
-import com.github.classpick.reservation.controller.dto.response.NoshowResponse;
+import com.github.classpick.reservation.controller.dto.response.*;
 import com.github.classpick.reservation.exception.ReservationException;
 import com.github.classpick.reservation.exception.ReservationExceptionCode;
 import com.github.classpick.reservation.repository.*;
@@ -17,6 +16,17 @@ public class ReservationAdminService {
 
     private final ReservationRepository reservationRepository;
     private final NoshowRepository noshowRepository;
+
+    @Transactional(readOnly = true)
+    public UserReservationListResponse getUserReservationsList() {
+
+        List<UserReservationResponse> userReservationResponses = reservationRepository.findAll()
+                .stream()
+                .map(UserReservationResponse::from)
+                .toList();
+
+        return UserReservationListResponse.of(userReservationResponses);
+    }
 
     @Transactional
     public void approveReservation(long reservationId) {
