@@ -2,6 +2,8 @@ package com.github.classpick.global.security.oauth;
 
 import com.github.classpick.global.property.OauthProperty;
 import com.github.classpick.global.security.jwt.TokenProvider;
+import com.github.classpick.user.repository.GroupEntity;
+import com.github.classpick.user.repository.GroupRepository;
 import com.github.classpick.user.repository.Role;
 import com.github.classpick.user.repository.UserEntity;
 import com.github.classpick.user.repository.UserRepository;
@@ -13,6 +15,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private static final String KOOKMIN_EMAIL_REGEX = ".*@kookmin\\.ac\\.kr$";
     private final OauthProperty oauthProperty;
     private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
     private final TokenProvider tokenProvider;
 
     @Override
@@ -44,10 +48,27 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         UserEntity user = userRepository.findByEmail(email)
-                .orElseGet(() -> userRepository.save(UserEntity.builder()
-                        .role(Role.USER)
-                        .email(oauth2User.getEmail())
-                        .build()));
+                .orElseGet(
+                        () -> {
+
+                            String emailDomain = email.split("@")[1];
+                            Optional<GroupEntity> savedGroupOptional = groupRepository.findByDomain(emailDomain);
+                            GroupEntity group;
+                            if(savedGroupOptional.isEmpty()){
+                                GroupEntity newGroupEntity = GroupEntity.ofDB(emailDomain);
+                                newGroupEntity = groupRepository.save(newGroupEntity);
+                                group = newGroupEntity;
+                            } else{
+                                group = savedGroupOptional.get();
+                            }
+
+                            return userRepository.save(UserEntity.builder()
+                                    .role(Role.USER)
+                                    .email(email)
+                                    .group(group)
+                                    .build());
+                        }
+                );
 
         String accessToken = tokenProvider.generateToken(user);
 
