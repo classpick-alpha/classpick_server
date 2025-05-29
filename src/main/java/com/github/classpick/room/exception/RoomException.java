@@ -8,4 +8,9 @@ public class RoomException extends CustomException {
 
         super(code);
     }
+
+    public RoomException(String message, int status) {
+
+        super(message, status);
+    }
 }
