@@ -2,6 +2,7 @@ package com.github.classpick.reservation.controller;
 
 import com.github.classpick.global.dto.Response;
 import com.github.classpick.reservation.controller.dto.response.NoshowListResponse;
+import com.github.classpick.reservation.controller.dto.response.UserReservationListResponse;
 import com.github.classpick.reservation.service.ReservationAdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,5 +43,11 @@ public class ReservationAdminController {
     @GetMapping("/v0.0/admin/reservation/noshows")
     public Response<NoshowListResponse> getNoshowsList() {
         return Response.ok(reservationAdminService.getNoshowList());
+    }
+
+    @Operation(summary = "유저 예약 목록 조회")
+    @GetMapping("/v0.0/admin/reservations")
+    public Response<UserReservationListResponse> getUserReservationsList() {
+        return Response.ok(reservationAdminService.getUserReservationsList());
     }
 }
