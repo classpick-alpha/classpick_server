@@ -1,14 +1,17 @@
 package com.github.classpick.room.util;
 
+import com.github.classpick.global.user.UserGetter;
 import com.github.classpick.room.exception.RoomException;
 import com.github.classpick.room.exception.RoomExceptionCode;
 import com.github.classpick.room.repository.RoomEntity;
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +20,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+@Component
+@RequiredArgsConstructor
 public class RoomExcelParserUtil {
 
     private static final int COL_PLACE_NAME = 0;
@@ -25,22 +30,24 @@ public class RoomExcelParserUtil {
     private static final int COL_ALIAS = 3;
     private static final int COL_IMAGE = 4;
 
-    public static List<RoomEntity> parse(InputStream is) {
+    private final UserGetter userGetter;
+
+    public List<RoomEntity> parse(InputStream is) {
 
         try (Workbook workbook = new XSSFWorkbook(is)) {
             Sheet sheet = workbook.getSheetAt(0);
             return IntStream.rangeClosed(1, sheet.getLastRowNum())
                     .mapToObj(sheet::getRow)
                     .filter(Objects::nonNull)
-                    .filter(RoomExcelParserUtil::isRowNotEmpty)
-                    .map(RoomExcelParserUtil::parseRow)
+                    .filter(this::isRowNotEmpty)
+                    .map(this::parseRow)
                     .toList();
         } catch (IOException e) {
             throw new RoomException(RoomExceptionCode.ROOM_EXCEL_PARSING_ERROR);
         }
     }
 
-    private static boolean isRowNotEmpty(Row row) {
+    private boolean isRowNotEmpty(Row row) {
 
         return IntStream.rangeClosed(0, row.getLastCellNum())
                 .mapToObj(row::getCell)
@@ -48,7 +55,7 @@ public class RoomExcelParserUtil {
                         !(x.getCellType() == CellType.STRING && x.getStringCellValue().isBlank()));
     }
 
-    private static RoomEntity parseRow(Row row) {
+    private RoomEntity parseRow(Row row) {
 
         String placeName = getCellValue(row.getCell(COL_PLACE_NAME)).orElseThrow(() -> new RoomException(
                 "placeName의 값은 문자열(String) 타입이어야 합니다.",
@@ -68,10 +75,11 @@ public class RoomExcelParserUtil {
                 .capacity(capacity.orElse(null))
                 .alias(alias.map(String::trim).orElse(null))
                 .image(image.map(String::trim).orElse(null))
+                .group(userGetter.getUser().getGroup())
                 .build();
     }
 
-    private static Optional<String> getCellValue(Cell cell) {
+    private Optional<String> getCellValue(Cell cell) {
 
         if (cell == null || cell.getCellType() == CellType.BLANK) {
             return Optional.empty();
@@ -95,7 +103,7 @@ public class RoomExcelParserUtil {
     }
 
 
-    private static Optional<Integer> getCellValueAsInt(Cell cell) {
+    private Optional<Integer> getCellValueAsInt(Cell cell) {
 
         if (cell == null || cell.getCellType() == CellType.BLANK) {
             return Optional.empty();
