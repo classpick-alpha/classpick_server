@@ -1,9 +1,16 @@
 package com.github.classpick.reservation.service;
 
-import com.github.classpick.reservation.controller.dto.response.*;
+import com.github.classpick.reservation.controller.dto.response.NoshowListResponse;
+import com.github.classpick.reservation.controller.dto.response.NoshowResponse;
+import com.github.classpick.reservation.controller.dto.response.UserReservationListResponse;
+import com.github.classpick.reservation.controller.dto.response.UserReservationResponse;
 import com.github.classpick.reservation.exception.ReservationException;
 import com.github.classpick.reservation.exception.ReservationExceptionCode;
-import com.github.classpick.reservation.repository.*;
+import com.github.classpick.reservation.repository.NoshowEntity;
+import com.github.classpick.reservation.repository.NoshowRepository;
+import com.github.classpick.reservation.repository.ReservationEntity;
+import com.github.classpick.reservation.repository.ReservationRepository;
+import com.github.classpick.reservation.repository.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +29,12 @@ public class ReservationAdminService {
 
         List<UserReservationResponse> userReservationResponses = reservationRepository.findAll()
                 .stream()
-                .map(UserReservationResponse::from)
+                .map(reservationEntity -> {
+                    NoshowEntity noshowEntity = noshowRepository.findByVerifiedNoshow(reservationEntity)
+                            .orElse(NoshowEntity.of(null, false, null));
+
+                    return UserReservationResponse.from(reservationEntity, noshowEntity.isVerified());
+                })
                 .toList();
 
         return UserReservationListResponse.of(userReservationResponses);
